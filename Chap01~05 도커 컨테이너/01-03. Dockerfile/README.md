@@ -171,3 +171,4 @@ docker build --tag hello:1.0 .
 ```
 docker run hello:1.0
 ```
+![image](https://user-images.githubusercontent.com/42735894/143451913-86fbff17-5e56-45bc-9d13-7ba2de0f5a0f.png)
