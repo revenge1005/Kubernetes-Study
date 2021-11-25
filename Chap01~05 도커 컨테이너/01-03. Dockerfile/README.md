@@ -138,3 +138,37 @@ LABEL <키>=<값>
 </td>
 </tr>
 </table>
+
+# 2. Dockerfile 예제
+
+### 1. 이미지에 포함시킬 파일들을 모을 디렉토리를 준비
+```
+mkdir test
+cd test
+cat > 
+```
+
+### 2. Dockerfile 작성
+```
+cat <<EOF > Dockerfile
+FROM alpine:latest
+RUN apk update && apk add figlet
+ADD ./message /message
+CMD cat /message | figlet
+EOF
+```
+
+### 3. 컨테이너에서 실행할 애플리케이션 코드 작성
+```
+echo "Hello World" > message
+```
+
+### 4. 이미지 빌드
+```
+docker build --tag hello:1.0 .
+```
+
+### 5. 결과 확인
+```
+docker run hello:1.0
+```
