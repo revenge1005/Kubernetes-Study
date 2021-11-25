@@ -3,7 +3,6 @@
 ## (1) 이미지 다운로드 (docker pull)
 
 ```
-<pre><code>
 $ docker pull centos:7
 7: Pulling from library/centos
 2d473b07cdd5: Pull complete 
