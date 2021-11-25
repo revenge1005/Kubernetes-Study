@@ -1,7 +1,9 @@
 # 1. Hello world 실행
 
+### docker run hello-world
+
 ```
-$ docker run hello-world:latest
+$ docker run hello-world
 Unable to find image 'hello-world:latest' locally
 latest: Pulling from library/hello-world
 2db29710123e: Pull complete
