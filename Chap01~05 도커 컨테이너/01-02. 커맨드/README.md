@@ -1,22 +1,21 @@
 # 1. 도커 커맨드 예제
 
-### (1) 이미지 다운로드 (docker pull)
+## (1) 이미지 다운로드 (docker pull)
 
 ```
 $ docker pull centos:7
 7: Pulling from library/centos
-2d473b07cdd5: Pull complete
-Digest: sha256:9d4bcbbb213dfd745b58be38b13b996ebb5ac315fe75711bd618426a630e0987
+2d473b07cdd5: Pull complete 
+Digest: sha256:9d4bcbbb213dfd745b58be38b13b996ebb5ac315fe75711bd618426a630e0987 
 Status: Downloaded newer image for centos:7
 
-
-$ docker images
+$ docker images 
 REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
-hello-world   latest    feb5d9fea6a5   2 months ago   13.3kB
-centos        7         eeb6ee3f44bd   2 months ago   204MB
+hello-world   latest    feb5d9fea6a5   2 months ago   13.3kB 
+centos        7         eeb6ee3f44bd   2 months ago   204MB 
 ```
 
-### (2) 컨테이너 실행 (docker run)
+## (2) 컨테이너 실행 (docker run)
 
 <table>
 <tr>
@@ -90,7 +89,7 @@ docker run -it --name test1 centos:7 bash
 [root@af2b73b6a56d /]#
 ```
 
-### (3) 컨테이너 상태 출력 (docker ps)
+## (3) 컨테이너 상태 출력 (docker ps)
 
 ```
 $ docker ps -a
@@ -99,7 +98,7 @@ af2b73b6a56d   centos:7             "bash"     5 minutes ago    Exited (127) 11 
 3c2b66396b8a   hello-world:latest   "/hello"   29 minutes ago   Exited (0) 29 minutes ago               eloquent_haibt
 ```
 
-### (4) 로그 출력 (docker logs)
+## (4) 로그 출력 (docker logs)
 
 컨테이너 실행중 발생한 표준 출력/에러 출력을 간직하고 있다.
 
@@ -139,7 +138,7 @@ For more examples and ideas, visit:
 
 ### 실행 중인 컨테이너 정지 조건
 
-1. 컨테이너의 PID=1인 프로세스가 종료
+### A. 컨테이너의 PID=1인 프로세스가 종료
 ```
 # 커맨드 지정하지 않고 실행하여 컨테이너가 바로 종료되는 예 (기동하자마자 PID=1인 셸이 종료했기 때문)
 $ docker run ubuntu
@@ -174,7 +173,7 @@ CONTAINER ID   IMAGE     COMMAND   CREATED          STATUS                     P
 ff141a33bd2f   ubuntu    "bash"    13 seconds ago   Exited (0) 3 seconds ago             tom
 ```
 
-### 2. 'docker stop <컨테이너명 | 컨테이너_ID>' 실행
+### B. 'docker stop <컨테이너명 | 컨테이너_ID>' 실행
 ```
 $ docker ps -a
 CONTAINER ID   IMAGE     COMMAND   CREATED          STATUS          PORTS     NAMES
@@ -188,7 +187,7 @@ root@7b629ac52a20:/# exit
 $ 
 ```
 
-### 3. 'docker kill <컨테이너명 | 컨테이너_ID>' 실행
+### C. 'docker kill <컨테이너명 | 컨테이너_ID>' 실행
 ```
 $ docker ps -a
 CONTAINER ID   IMAGE     COMMAND   CREATED          STATUS          PORTS     NAMES
@@ -202,7 +201,7 @@ root@7b629ac52a20:/# exit
 $ 
 ```
 
-### (6) 컨테이너 재기동 (docker start)
+## (6) 컨테이너 재기동 (docker start)
 
 ```
 docker ps -a
@@ -278,5 +277,4 @@ $ docker push shchoi94/centos:7-git
 The push refers to repository [docker.io/shchoi94/centos]
 d0d04bb698f3: Pushed
 174f56854903: Layer already exists
-7-git: digest: sha256:48117866834ddccd28548002fda6e04e65490b0ccf95655dd84da05a952d2e65 size: 742
 ```
