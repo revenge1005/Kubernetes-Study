@@ -1,6 +1,6 @@
 # 1. 도커 커맨드 예제
 
-### (1) 이미지 다운로드 (docker pull)
+## (1) 이미지 다운로드 (docker pull)
 
 ```
 $ docker pull centos:7
@@ -16,7 +16,7 @@ hello-world   latest    feb5d9fea6a5   2 months ago   13.3kB
 centos        7         eeb6ee3f44bd   2 months ago   204MB
 ```
 
-### (2) 컨테이너 실행 (docker run)
+## (2) 컨테이너 실행 (docker run)
 
 <table>
 <tr>
@@ -90,7 +90,7 @@ docker run -it --name test1 centos:7 bash
 [root@af2b73b6a56d /]#
 ```
 
-### (3) 컨테이너 상태 출력 (docker ps)
+## (3) 컨테이너 상태 출력 (docker ps)
 
 ```
 $ docker ps -a
@@ -99,7 +99,7 @@ af2b73b6a56d   centos:7             "bash"     5 minutes ago    Exited (127) 11 
 3c2b66396b8a   hello-world:latest   "/hello"   29 minutes ago   Exited (0) 29 minutes ago               eloquent_haibt
 ```
 
-### (4) 로그 출력 (docker logs)
+## (4) 로그 출력 (docker logs)
 
 컨테이너 실행중 발생한 표준 출력/에러 출력을 간직하고 있다.
 
