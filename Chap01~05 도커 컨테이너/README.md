@@ -1,5 +1,6 @@
 # 1. 도커 컨테이너 라이프 사이클
 
+![container life cycle](https://user-images.githubusercontent.com/42735894/143411995-cfc609d2-40d9-42aa-91f0-2fbae489be50.PNG)
 
 # 2. 도커 커맨드 치트 시트
 
