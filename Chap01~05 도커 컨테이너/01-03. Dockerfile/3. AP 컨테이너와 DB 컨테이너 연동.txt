@@ -1,0 +1,77 @@
+
+### 컨테이너 네트워크 작성
+$ docker network create apl-net
+1245d3599357991b8d26bb923af1403405e9397f578ad17210241bc417919ab7
+
+
+### MySQL 서버 기동
+$ docker run -d --name mysql --network apl-net -e MYSQL_ROOT_PASSWORD=1234 mysql:5.7
+
+$ docker ps
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS          PORTS                                   NAMES
+aa02ac6c8412   mysql:5.7      "docker-entrypoint.s…"   28 seconds ago   Up 28 seconds   3306/tcp, 33060/tcp                     mysql
+
+
+### 애플리케이션 컨테이너 생성
+$ mkdir -p web/php
+$ cd web 
+$ cat <<EOF > php/index.php
+<html>
+<head><title>PHP CONNECTION TEST</title></head>
+<body>
+
+<?php
+\$servername = "mysql";
+\$database = "mysql";
+
+\$username = getenv('MYSQL_USER');
+\$password = getenv('MYSQL_PASSWORD');
+
+try {
+    \$dsn = "mysql:host=\$servername;dbname=\$database";
+    \$conn = new PDO(\$dsn, \$username, \$password);
+    \$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    print("<p>접속에 성공했습니다.</p>");
+} catch(PDOException \$e) {
+    print("<p>접속에 실패했습니다.</p>");
+    echo \$e->getMessage();
+}
+
+\$conn = null; 
+print('<p>종료합니다.</p>');
+
+?>
+</body>
+</html>
+EOF
+
+$ cat <<EOF > Dockerfile
+FROM php:7.0-apache
+RUN apt-get update && apt-get install -y \
+    && apt-get install -y libmcrypt-dev mysql-client \
+    && apt-get install -y zip unzip git vim
+
+RUN docker-php-ext-install pdo_mysql session json mbstring
+COPY php/ /var/www/html/
+EOF
+
+$ docker build -t php-apl:0.1 .
+
+$ docker images
+REPOSITORY   TAG          IMAGE ID       CREATED          SIZE
+php-apl      0.1          e8573582ee9d   15 seconds ago   574MB
+
+$ docker run -d --name php --network apl-net -p 8080:80 -e MYSQL_USER=root -e MYSQL_PASSWORD=1234 php-apl:0.1
+
+$ curl http://localhost:8080/
+<html>
+<head><title>PHP CONNECTION TEST</title></head>
+<body>
+
+<p>접속에 성공했습니다.</p><p>종료합니다.</p></body>
+</html>
+
+$ docker logs php
+[Thu Nov 25 14:42:34.415959 2021] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.25 (Debian) PHP/7.0.33 configured -- resuming normal operations
+[Thu Nov 25 14:42:34.416049 2021] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+192.168.219.1 - - [25/Nov/2021:14:42:40 +0000] "GET / HTTP/1.1" 200 424 "-" 

@@ -1,0 +1,61 @@
+
+$ mkdir my-daemon
+$ cd my-daemon/
+
+
+$ cat <<EOF > Dockerfile
+FROM alpine:latest
+RUN apk update && apk add bash
+ADD ./my_daemon /my_daemon
+CMD ["/bin/bash", "/my_daemon"]
+EOF
+
+
+$ cat <<EOF > my_daemon
+# 카운터 초기화
+COUNT=0
+
+# 환경변수가 없으면 설정 
+if [ -z "\$INTERVAL" ]; then
+    INTERVAL=3
+fi
+
+# 메인 루프
+while [ ture ];
+do
+    TM=\`date|awk '{print \$4}'\`
+    printf "%s : %s \n" \$TM \$COUNT
+    let COUNT=COUNT+1
+    sleep \$INTERVAL
+done
+EOF
+
+
+$ docker build --tag my_daemon:0.1 .
+$ docker images
+REPOSITORY   TAG          IMAGE ID       CREATED          SIZE
+my_daemon    0.1          df3b02719d3b   26 seconds ago   10MB
+
+
+### 카운터가 3을 출력한 시점에서 다른 터머널에서 컨테이너를 정지시켰지만, 종료까지 10초 이상 경과한 것을 알 수 있다.
+$ docker run --name myd my_daemon:0.1  # (1) 컨테이너 실행
+14:57:28 : 0
+14:57:31 : 1
+14:57:34 : 2  # <-- (2) 여기서 다른 터미널에서 docker stop myd 실행 (종료 요청)
+14:57:37 : 3
+14:57:40 : 4
+14:57:43 : 5
+14:57:46 : 6  # <-- (3) 시간 경과 후 컨테이너 종료
+
+
+### 그리고 컨테이너를 재실행했지만 컨테이너 값은 초기값으로 돌아가 있는 것을 알 수 있다.
+### 컨테이너를 종료하면 로그는 보존되지만 메모리상의 정보는 없어지기 때문이다.
+$ docker start myd -i  # (4) 종료된 컨테이너 재실행
+15:04:03 : 0
+15:04:06 : 1
+15:04:09 : 2
+15:04:12 : 3  # <-- (5) docker stop myd 다시 정지 요청
+15:04:15 : 4
+15:04:18 : 5
+15:04:21 : 6  # <-- (6) 시간 경과 후 컨테이너 종료
+

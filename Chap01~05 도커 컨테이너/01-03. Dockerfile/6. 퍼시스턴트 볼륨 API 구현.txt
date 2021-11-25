@@ -1,0 +1,74 @@
+
+
+### 컨테이너를 지워도 데이터를 잃지 않기 위해서는 퍼시스턴트 볼륨을 사용해야 한다.
+### 여기서 퍼시스턴트 볼륨으로 호스트의 디렉토리를 사용한다.
+
+$ mkdir -p my-daemon3/data
+$ cd my-daemon3/
+
+$ cat <<EOF > my_daemon3
+# 카운터 초기화
+COUNT=0
+
+# 퍼시스턴트 볼륨
+PV=/pv/save.dat
+
+# 환경변수가 없으면 설정
+if [ -z "\$INTERVAL" ]; then
+    INTERVAL=3
+fi
+
+# 기동 시 상태 취득 
+if [ -f \$PV ]; then
+   COUNT=\`cat \$PV\`
+   rm -f \$PV
+fi
+
+# SIGTERM 시그널 처리
+save() {
+  echo \$COUNT > \$PV
+  exit
+}
+trap save TERM
+
+
+# 메인 루프
+while [ ture ];
+do
+    TM=\`date|awk '{print \$4}'\`
+    printf "%s : %s \n" \$TM \$COUNT
+    let COUNT=COUNT+1
+    sleep \$INTERVAL
+done
+EOF
+
+$ cat <<EOF > Dockerfile3
+FROM alpine:latest
+RUN apk update && apk add bash
+ADD ./my_daemon3 /my_daemon
+CMD ["/bin/bash", "/my_daemon"]
+EOF
+
+$ docker build --tag my_daemon3:0.3 -f Dockerfile3 .
+
+
+$  docker run -it --name myd -v `pwd`/data:/pv my_daemon3:0.3
+16:07:57 : 0
+16:08:00 : 1
+16:08:03 : 2
+
+
+$ docker start myd -i
+16:08:22 : 3
+16:08:25 : 4
+
+### 컨테이너 지우고 다시 실행
+$ docker rm myd 
+$ docker run -it --name myd -v `pwd`/data:/pv my_daemon3:0.3
+16:08:47 : 5
+16:08:50 : 6
+
+
+### 보존 데이터 출력
+$ cat data/save.dat
+7

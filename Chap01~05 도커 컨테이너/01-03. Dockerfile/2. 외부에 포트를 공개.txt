@@ -1,0 +1,18 @@
+
+### 호스트 IP 주소와 포트로 컨테이너의 웹 서버 공개
+$ docker run -d --name webserver1 -p 8080:80 nginx:latest
+db242e17cd21463607f35e9ab93f43e0e591594cd16f2cfd85278a74f0952915
+
+$ curl http://localhost:8080/
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<생략>
+
+$ http://192.168.219.140:8080/
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<생략>

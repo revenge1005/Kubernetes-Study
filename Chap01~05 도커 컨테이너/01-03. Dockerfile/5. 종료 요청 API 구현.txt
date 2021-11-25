@@ -1,0 +1,72 @@
+
+### 애플리케이션의 버전 업데이트 하거나 H/W 점검을 위해 컨테이너를 다른 서버에 옮기도록 종료 요청 시그널을 보내는 경우가 빈번하게 발생한다.
+### 그래서 쿠버네티스에서 돌아가는 컨테이너를 개발할 때는 종료 요청 시그널 처리를 구현하는 것이 좋다.
+
+### 전 예제에서 카운터가 3을 출력한 시점에서 다른 터머널에서 컨테이너를 정지시켰지만, 종료까지 10초 이상 경과한 것을 알 수 있다.
+### 이번 예제에서는 바로 종료할 수 있도고, 카운터 값도 보존하도록 문제를 해결한다.
+
+
+$ mkdir my-daemon2
+$ cd my-daemon2/
+
+
+$ cat <<EOF > my_daemon2
+# 카운터 초기화
+COUNT=0
+
+# 환경변수가 없으면 설정 
+if [ -z "\$INTERVAL" ]; then
+    INTERVAL=3
+fi
+
+# 기동시 상태 취득
+if [ -f save.dat ]; then
+   COUNT=\`cat save.dat\`
+   rm -f save.dat
+fi
+
+# SIGTERM 시그널 처리 
+save() {
+  echo \$COUNT > save.dat
+  exit
+}
+trap save TERM
+
+
+# 메인 루프
+while [ ture ];
+do
+    TM=\`date|awk '{print \$4}'\`
+    printf "%s : %s \n" \$TM \$COUNT
+    let COUNT=COUNT+1
+    sleep \$INTERVAL
+done
+EOF
+
+$ cat <<EOF > Dockerfile2
+FROM alpine:latest
+RUN apk update && apk add bash
+ADD ./my_daemon2 /my_daemon
+CMD ["/bin/bash", "/my_daemon"]
+EOF
+
+
+$ docker build --tag my_daemon:0.2 -f Dockerfile2 .
+
+
+$ docker images
+REPOSITORY   TAG          IMAGE ID       CREATED             SIZE
+my_daemon    0.2          07b39bf6858f   7 seconds ago       10MB
+
+
+### 카운터 값이 3이 표시된 시점에서 'docker stop myd'를 실행한 결과 이번에는 곧바로 정지한 것을 알 수 있다.
+### 그리고 컨테이너 재시작해 보면 카운터 값이 이어서 시작하는 것도 확인할 수 있다.
+$ docker run --name myd my_daemon:0.2  
+15:54:16 : 0
+15:54:19 : 1
+15:54:22 : 2  # <-- 여기서 다른 터미널에서 docker stop myd 실행
+$ docker start myd -i
+15:55:33 : 3  # <-- 카운터 값이 이어지고 있다.
+15:55:36 : 4 
+
+### 하지만 한 가지 문제점이 있는데, 컨테이너 안에 파일로 보존한 데이터는 컨테이너가 지워지면 삭제된다는 점이다.
