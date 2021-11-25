@@ -145,7 +145,6 @@ LABEL <키>=<값>
 ```
 mkdir test
 cd test
-cat > 
 ```
 
 ### 2. Dockerfile 작성
