@@ -3,17 +3,17 @@
 ## (1) 이미지 다운로드 (docker pull)
 
 ```
+<pre><code>
 $ docker pull centos:7
 7: Pulling from library/centos
-2d473b07cdd5: Pull complete
-Digest: sha256:9d4bcbbb213dfd745b58be38b13b996ebb5ac315fe75711bd618426a630e0987
+2d473b07cdd5: Pull complete 
+Digest: sha256:9d4bcbbb213dfd745b58be38b13b996ebb5ac315fe75711bd618426a630e0987 
 Status: Downloaded newer image for centos:7
 
-
-$ docker images
+$ docker images 
 REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
-hello-world   latest    feb5d9fea6a5   2 months ago   13.3kB
-centos        7         eeb6ee3f44bd   2 months ago   204MB
+hello-world   latest    feb5d9fea6a5   2 months ago   13.3kB 
+centos        7         eeb6ee3f44bd   2 months ago   204MB 
 ```
 
 ## (2) 컨테이너 실행 (docker run)
