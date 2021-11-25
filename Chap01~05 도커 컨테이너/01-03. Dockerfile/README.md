@@ -95,7 +95,7 @@ EXPOSE <port> [<port>...]
 <tr>
 <td>
 <!-- REMOVE THE BACKSLASHES -->
-USER <유저명> | <UID>
+USER <유저명> | < UID >
 </td>
 <td>
 RUN, CMD, ENTRYPOINT 실행 유저 지정
