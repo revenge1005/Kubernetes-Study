@@ -131,7 +131,7 @@ ARG <이름>[=<디폴트 값>]
 <tr>
 <td>
 <!-- REMOVE THE BACKSLASHES -->
-LABEL <key>=<value> <key>=<value>
+LABEL <key>=<value> 
 </td>
 <td>
 이미지의 메타데이터에 라벨을 추가
