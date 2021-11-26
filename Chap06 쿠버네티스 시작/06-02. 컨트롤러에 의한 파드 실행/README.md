@@ -92,9 +92,7 @@ NAME                                   DESIRED   CURRENT   READY   AGE
 replicaset.apps/webserver-559b886555   5         5         0       30s
 ```
 
-일부 파드를 지워졌을 때 새로운 파드가 자동으로 생성되는 것을 확인할 수 있다.
-
-즉, 파드는 일시적인 존재로 그 자체가 되살아난 것이 아니라 새로운 파드가 만들어진 것을 볼 수 있으며, 컨테이너의 애플리케이션은 기본적으로 상태가 없어야 한다.(Stateless)
+파드는 일시적인 존재로 그 자체가 되살아난 것이 아니라 새로운 파드가 만들어진 것을 볼 수 있으며, 컨테이너의 애플리케이션은 기본적으로 상태가 없어야 한다.(Stateless)
 
 ```
 $ kubectl delete pod webserver-559b886555-6hxpx webserver-559b886555-fb479
