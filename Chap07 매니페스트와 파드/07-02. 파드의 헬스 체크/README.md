@@ -28,7 +28,7 @@
 + 이 기능을 사용하기 위해서는 매니페스트에 명시적으로 설정해야 한다.
 
 ----
-
+ 
 # 2. 프로브 대응 핸들러의 종류
 
 <table>
@@ -79,3 +79,42 @@ httpGet
 </td>
 </tr>
 </table>
+
+----
+ 
+# 3. 프로브 대응 핸들러 기술 예시
+
+### (1) httpGet (HTTP 핸들러)
+
++ 핸들러의 경로
+
++ HTTP 서버의 포트번호
+
+```
+readinessProbe:
+    httpGet:
+        path: /read
+        port: 3000
+```
+
+### (2) tcpSocket (TCP 포트 접속 핸들러)
+
++ 감시 대상의 포트번호
+
+```
+readinessProbe:
+    tcpSocket:
+        port: 80
+```
+
+### (3) exec (컨테이너 내의 커맨드 실행 핸들러)
+
++ 컨테이너의 커맨드를 배열로 기술
+
+```
+livenessProve:
+    exec:
+        command:
+            - cat
+            - /tmp/healthy
+```
