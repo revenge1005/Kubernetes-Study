@@ -1,0 +1,109 @@
+
+### 헬스 체크는 파드가 스케줄된 노드에 있는 kubelet이 수행한다.
+### 노드의 하드웨어 장애 시에는 kubelet도 정지되기 때문에 노드의 장애 대책으로는 적합하지 않는다.
+### 따라서 노드의 장애 대책을 위해서는 헬스 체크가 아닌 컨트롤러를 사용해야 한다
+
+### 헬스 체크 확인을 위한 파일 목록
+$ tree hc-probe/
+hc-probe/
+├── webapl
+│   ├── Dockerfile
+│   ├── package.json
+│   └── webapl.js
+└── webapl-pod.yml
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+### 파드를 배포하고 헬스 체크가 실행되어 READY 상태가 되는 모습
+
+$ kubectl apply -f webapl-pod.yml
+pod/webapl created
+
+## READY 0/1이 최종적으로 1/1이 되는데, 처음에 0인 이유는
+## readinessProbe가 아직 성공하지 못해여 READY 상태가 아닌 것으로 판정했기 떄문이다.
+
+$ kubectl get pod
+NAME                         READY   STATUS              RESTARTS   AGE
+webapl                       0/1     ContainerCreating   0          5s
+
+$ kubectl get pod
+NAME                         READY   STATUS    RESTARTS   AGE
+webapl                       0/1     Running   0          14s
+
+## 로그에 기록된 헬스 체크 결과물
+
+$ kubectl logs webapl
+GET /healthz 200              ## LivenessProve에 의한 액세스
+GET /healthz 200              ## 5초 간격으로 요청
+GET /healthz 200      
+GET /ready 500                ## 20초가 지나기 전에는 /ready가 500을 응답함
+GET /healthz 200
+GET /ready 200                ## 6초 후 readinessProbe에 성공하여 READY 1/1로 준비 완료
+
+
+## 파드의 상세 정보
+
+$ kubectl describe pod webapl
+
+<중략>
+Containers:
+  webapl:
+    Container ID:   docker://fe56a29c958f6f1bd1b619eb3706fce363e75d8d1f5da6b28a0b727e24040c6f
+    Image:          maho/webapl:0.1
+    Image ID:       docker-pullable://maho/webapl@sha256:2d90f1ef4d0b4b0dcf3372289e7552ef23de3a1910d747b3d42ee5e46b96d57a
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Fri, 26 Nov 2021 17:37:31 +0900
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    137
+      Started:      Fri, 26 Nov 2021 17:36:06 +0900
+      Finished:     Fri, 26 Nov 2021 17:37:31 +0900
+    Ready:          True
+    Restart Count:  1
+    Liveness:       http-get http://:3000/healthz delay=3s timeout=1s period=5s #success=1 #failure=3
+    Readiness:      http-get http://:3000/ready delay=15s timeout=1s period=6s #success=1 #failure=3
+<중략>
+
+
+## Age 24s 시점에서 Liveness Prove failed는 애플리케이션 기동이 완료되지 않아 타임 아웃이 발생한 것이다
+## 이후 기동이 완료되어 probe에 성동하지만 로그에는 남지 않는다
+## 애플리케이션에서 20초 전에는 HTTP 500을 반환하도록 구현되어 있어, Age 20s 시점에서 Readiness Probe에 실패한 기록이 남아 있다.
+## 6초 후 probe에 성공하지만 로그에는 남지 않는다.
+
+Events:
+  Type     Reason     Age                     From               Message
+  ----     ------     ----                    ----               -------
+  Normal   Scheduled  46s                     default-scheduler  Successfully assigned 
+  Normal   Pulling    45s                     kubelet            Pulling image "maho/webapl:0.1"
+  Normal   Pulled     36s                     kubelet            Successfully pulled image "maho/webapl:0.1" in 8.382247481s
+  Normal   Created    36s                     kubelet            Created container webapl
+  Normal   Started    36s                     kubelet            Started container webapl
+  Warning  Unhealthy  24s                     kubelet            Liveness probe failed: HTTP probe failed with statuscode: 500
+  Warning  Unhealthy  2m15s (x10 over 6m30s)  kubelet            Readiness probe failed: HTTP probe failed with statuscode: 500
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+### 활성 프로브가 반복해서 실패하여 컨테이너가 재시작되는 것을 확인
+
+$ kubectl describe pod webapl
+<생략>
+Events:
+  Type     Reason     Age                     From               Message
+  ----     ------     ----                    ----               -------
+  Normal   Scheduled  7m28s                   default-scheduler  Successfully assigned default/webapl to k8s-node01
+  Normal   Created    4m38s (x3 over 7m27s)   kubelet            Created container webapl
+  Normal   Started    4m38s (x3 over 7m27s)   kubelet            Started container webapl
+  Warning  Unhealthy  4m22s (x3 over 7m10s)   kubelet            Readiness probe failed: HTTP probe failed with statuscode: 500
+  Normal   Killing    3m43s (x3 over 6m33s)   kubelet            Container webapl failed liveness probe, will be restarted
+  Normal   Pulled     3m13s (x4 over 7m27s)   kubelet            Container image "maho/webapl:0.1" already present on machine
+  Warning  Unhealthy  2m23s (x11 over 6m43s)  kubelet            Liveness probe failed: HTTP probe failed with statuscode: 500
+
+kubectl get pod -o wide
+NAME                         READY   STATUS             RESTARTS        AGE    IP          NODE         NOMINATED NODE   READINESS GATES
+webapl                       0/1     CrashLoopBackOff   6 (31s ago)     10m    10.32.0.3   k8s-node01   <none>           <none>
