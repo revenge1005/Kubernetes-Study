@@ -1,5 +1,5 @@
 
-# 1. kubectl 명령
+# 이번에 사용한 kubectl 명령
 
 <table>
 <tr>
