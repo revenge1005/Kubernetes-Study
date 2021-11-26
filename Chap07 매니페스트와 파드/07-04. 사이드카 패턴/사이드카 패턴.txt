@@ -1,9 +1,64 @@
 
-> 앞에서 초기화 전용 컨테이너가 처리를 완료하면 서비스 전용 컨테이너가 시작하는 구성 패탠을 보았다.
+$ tree sidecar/
+sidecar/
+├── contents-cloner
+├── Dockerfile
+└── webserver.yml
 
-> 이번에는 파드 내부에 있는 여러 개의 컨테이너가 동시에 시작하는데, "웹 서버 컨테이너와 최신 컨텐츠를 깃헙에서 다운받는 컨테이너가 하나의 파드에 묶여 있다".
+> contents-cloner의 환경변수 CONTENTS_SOURCE_URL에 설정된 URL에 60초 간격으로 갱신 여부를 확인하여 다운받는다.
+  (갱신 여부를 확인하고, 다운로드하는 기능은 git 명령어의 기능을 사용하고 있다.)
+ 
+ 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+$ docker build -t maho/c-cloner:0.1 .
+Sending build context to Docker daemon  4.608kB
+Step 1/6 : FROM ubuntu:16.04
+16.04: Pulling from library/ubuntu
+58690f9b18fc: Pull complete
 
-> 사이드카 패턴의 장점은 여러 개의 컨테이너를 조합하여 사용함으로써 컨테이너의 재사용성이 높아지고, 생산성이 높아진다는 점이다.
 
-> 매번 필요에 맞는 컨테이너를 만드는 것이 아니라 전에 만든 컨테이너를 재활용할 수 있어 단기간에 커더란 성과를 얻을 수 있다.
+$ kubectl apply -f webserver.yml
+pod/webserver created
 
+
+$ kubectl get pod -o wide
+NAME        READY   STATUS    RESTARTS   AGE   IP          NODE         NOMINATED NODE   READINESS GATES
+webserver   2/2     Running   0          18s   10.40.0.1   k8s-node02   <none>           <none>
+
+
+$ curl http://10.40.0.1
+<!DOCTYPE html>
+<html>
+<head>
+<title>ポッドテンプレート役割</title>
+</head>
+<body>
+<h1>ポッドテンプレート役割</h1>
+
+<p>ポッドテンプレートは、デプロイメント、レプリカセット、ジョブ、およびステートフルセットなどのコントローラに対するポッド仕様です。 これらコントローラは、ポッドテンプレートを使用して実際のポッドを作成します。</p>
+
+<p><a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/">Pod Overview</a>.</p>
+
+
+</body>
+</html>
+ 
+ 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+> 사이드카 구성 파드를 종료할 때 문제점, 종료할 때 시간이 걸리는데 이 것을 해결하는 방법은 시그널과 관련있다.
+
+> 작성된 셸에는 SIGTERM 시그널이 왔을 때 exit하는 구현이 없다.
+
+> 그래서 종료 처리 대기 시간만큼 기다렸다가 SIGKILL 시그널이 보내 강제 종료를 하는 것이다
+
+> 이를 위해 다음 코드를 스크립트에 넣으면 빠르게 종료한다.
+
+## SIGTERM 수신 시 처리
+save() {
+    exit 0
+}
+trap save TERM
