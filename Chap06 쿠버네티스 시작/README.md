@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # 1. kubectl 명령
 
 <table>
