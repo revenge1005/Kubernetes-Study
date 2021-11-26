@@ -73,7 +73,7 @@ spec:                                       ## 표 2 파드 사양
 
 # 3. 매니페스트 작성 방법
 
-[쿠버네티스 API 레퍼런스](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/)
+[쿠버네티스 API 레퍼런스 - 파드(Pod) URL](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/)
 
 ### 표 1 파드 API
 <table>
