@@ -50,6 +50,8 @@ kubectl apply -f 파일명
 </tr>
 </table>
 
+----
+
 # 2. 매니페스트 예시
 
 아래 매니페스트의 내용은 'kubectl run nginx --image=nginx:latest --restart=Never'를 실행한 것과 같은 의미를 가진다.
@@ -66,6 +68,8 @@ spec:                                       ## 표 2 파드 사양
         - name: nginx
           image: nginx:latest
 ```
+
+----
 
 # 3. 매니페스트 작성 방법
 
