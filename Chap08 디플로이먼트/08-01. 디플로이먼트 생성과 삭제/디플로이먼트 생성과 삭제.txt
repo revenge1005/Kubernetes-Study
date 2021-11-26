@@ -3,14 +3,17 @@
 $ kubectl apply -f deployment1.yml
 deployment.apps/web-deploy created
 
+> (2) 디플로이먼트 상태
 $ kubectl get deployment
 NAME         READY   UP-TO-DATE   AVAILABLE   AGE
 web-deploy   3/3     3            3           19s
 
+> (3) 레플리카셋 상태
 $ kubectl get replicaset
 NAME                    DESIRED   CURRENT   READY   AGE
 web-deploy-6bc4dfc596   3         3         3       45s
 
+> (4) 파드의 상태 IP 주소와 노드
 $ kubectl get pod -o wide
 NAME                          READY   STATUS    RESTARTS   AGE   IP          NODE         NOMINATED NODE   READINESS GATES
 web-deploy-6bc4dfc596-8mcgs   1/1     Running   0          63s   10.40.0.2   k8s-node02   <none>           <none>
