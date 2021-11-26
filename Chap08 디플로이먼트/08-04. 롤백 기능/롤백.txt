@@ -1,0 +1,52 @@
+
+> 데이터베이스에서 트랜잭션 처리 중 데이터의 변경이나 삭제를 취소하고 원래 상태로 되돌리는 것을 의미한다
+
+> 한편, 쿠버네티스에서는 롤아웃 전에 사용하던 예전 컨테이너로 되돌리는 것을 의미한다
+
+> 롤백을 할 때도 롤아웃과 마찬가지로 사용자의 요청을 처리하면서 파드를 점진적으로 교체한다
+
+> 이 기능을 사용하면 새로운 기능을 출시하고 얼마 지나지 않아 문제가 발견된 경우, 간단하게 출시 이전으로 되돌릴 수 있다
+  (하지만 데이터베이스 등에 적재된 데이터까지 롤백되는 것은 아니다 따라서 데이터 리커버리는 별도로 구현해야 한다)
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+> (1) 롤백 시작
+$ kubectl rollout undo deployment web-deploy
+deployment.apps/web-deploy rolled back
+
+> (2) 롤백 진행 중
+$ kubectl get pod
+NAME                          READY   STATUS              RESTARTS   AGE
+web-deploy-5899d78c9-fxrz6    1/1     Terminating         0          7m48s
+web-deploy-5899d78c9-g697d    1/1     Running             0          8m5s
+web-deploy-5899d78c9-mc72c    0/1     Terminating         0          8m5s
+web-deploy-5899d78c9-pf5mz    1/1     Running             0          7m46s
+web-deploy-5899d78c9-qhbgs    1/1     Running             0          7m50s
+web-deploy-5899d78c9-szbgs    1/1     Terminating         0          7m46s
+web-deploy-5899d78c9-xj8nc    1/1     Terminating         0          8m5s
+web-deploy-6bc4dfc596-5c4th   1/1     Running             0          5s
+web-deploy-6bc4dfc596-5wlqt   1/1     Running             0          5s
+web-deploy-6bc4dfc596-99rd9   0/1     ContainerCreating   0          1s
+web-deploy-6bc4dfc596-gl94w   0/1     ContainerCreating   0          2s
+web-deploy-6bc4dfc596-kcwr4   0/1     ContainerCreating   0          2s
+web-deploy-6bc4dfc596-p5zz7   1/1     Running             0          5s
+web-deploy-6bc4dfc596-pcl26   1/1     Running             0          5s
+web-deploy-6bc4dfc596-scg8m   1/1     Running             0          5s
+web-deploy-6bc4dfc596-zf7w8   0/1     ContainerCreating   0          2s
+web-deploy-6bc4dfc596-zq4v6   0/1     ContainerCreating   0          2s
+
+> (3) 완료
+$ kubectl get pod
+NAME                          READY   STATUS    RESTARTS   AGE
+web-deploy-6bc4dfc596-5c4th   1/1     Running   0          10s
+web-deploy-6bc4dfc596-5wlqt   1/1     Running   0          10s
+web-deploy-6bc4dfc596-99rd9   1/1     Running   0          6s
+web-deploy-6bc4dfc596-gl94w   1/1     Running   0          7s
+web-deploy-6bc4dfc596-kcwr4   1/1     Running   0          7s
+web-deploy-6bc4dfc596-p5zz7   1/1     Running   0          10s
+web-deploy-6bc4dfc596-pcl26   1/1     Running   0          10s
+web-deploy-6bc4dfc596-scg8m   1/1     Running   0          10s
+web-deploy-6bc4dfc596-zf7w8   1/1     Running   0          7s
+web-deploy-6bc4dfc596-zq4v6   1/1     Running   0          7s

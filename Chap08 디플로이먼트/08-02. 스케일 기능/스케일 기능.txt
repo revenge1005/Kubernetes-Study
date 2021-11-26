@@ -1,0 +1,84 @@
+
+> 스케일 기능이란, 레플리카의 값을 변경하여 파드의 개수를 조절해 처리 능력을 높이거나 낮추는 기능을 말한다.
+
+> 여기서느 수동으로 레플리카의 값을 변경하는 방법에 대루며, 이에 반해 CPU 사용률과 연동하여 동적으로 레플리카의 값을 조절하는 오토 스케일 기능도 있다.
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+$ kubectl get pod -o wide
+NAME                          READY   STATUS    RESTARTS   AGE   IP          NODE         NOMINATED NODE   READINESS GATES
+web-deploy-6bc4dfc596-cwjzs   1/1     Running   0          82s   10.40.0.2   k8s-node02   <none>           <none>
+web-deploy-6bc4dfc596-jj94j   1/1     Running   0          82s   10.40.0.1   k8s-node02   <none>           <none>
+web-deploy-6bc4dfc596-qwlll   1/1     Running   0          82s   10.32.0.3   k8s-node01   <none>           <none>
+
+
+> (1) 레플리카 수를 변경한 매니페스트를 적용 (3->10)
+$ kubectl apply -f deployment2.yml
+deployment.apps/web-deploy configured
+
+> (2) 확인
+$  kubectl get pod -o wide
+NAME                          READY   STATUS    RESTARTS   AGE     IP          NODE         NOMINATED NODE   READINESS GATES
+web-deploy-6bc4dfc596-7dllk   1/1     Running   0          45s     10.32.0.6   k8s-node01   <none>           <none>
+web-deploy-6bc4dfc596-9b9x5   1/1     Running   0          45s     10.40.0.3   k8s-node02   <none>           <none>
+web-deploy-6bc4dfc596-9xsx8   1/1     Running   0          45s     10.32.0.5   k8s-node01   <none>           <none>
+web-deploy-6bc4dfc596-bpxj9   1/1     Running   0          45s     10.40.0.4   k8s-node02   <none>           <none>
+web-deploy-6bc4dfc596-cwjzs   1/1     Running   0          2m25s   10.40.0.2   k8s-node02   <none>           <none>
+web-deploy-6bc4dfc596-fqptm   1/1     Running   0          45s     10.32.0.7   k8s-node01   <none>           <none>
+web-deploy-6bc4dfc596-jj94j   1/1     Running   0          2m25s   10.40.0.1   k8s-node02   <none>           <none>
+web-deploy-6bc4dfc596-qwlll   1/1     Running   0          2m25s   10.32.0.3   k8s-node01   <none>           <none>
+web-deploy-6bc4dfc596-xjmvh   1/1     Running   0          45s     10.32.0.4   k8s-node01   <none>           <none>
+web-deploy-6bc4dfc596-zv7hl   1/1     Running   0          45s     10.40.0.5   k8s-node02   <none>           <none>
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+> 'kubectl scale'을 사용하여 파드의 개수 늘리기
+
+> (1) 초기 상태
+$ kubectl get all
+NAME                              READY   STATUS    RESTARTS   AGE
+pod/web-deploy-6bc4dfc596-7dllk   1/1     Running   0          3m42s
+pod/web-deploy-6bc4dfc596-9b9x5   1/1     Running   0          3m42s
+pod/web-deploy-6bc4dfc596-9xsx8   1/1     Running   0          3m42s
+pod/web-deploy-6bc4dfc596-bpxj9   1/1     Running   0          3m42s
+pod/web-deploy-6bc4dfc596-cwjzs   1/1     Running   0          5m22s
+pod/web-deploy-6bc4dfc596-fqptm   1/1     Running   0          3m42s
+pod/web-deploy-6bc4dfc596-jj94j   1/1     Running   0          5m22s
+pod/web-deploy-6bc4dfc596-qwlll   1/1     Running   0          5m22s
+pod/web-deploy-6bc4dfc596-xjmvh   1/1     Running   0          3m42s
+pod/web-deploy-6bc4dfc596-zv7hl   1/1     Running   0          3m42s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   29d
+
+NAME                         READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/web-deploy   10/10   10           10          5m22s
+
+NAME                                    DESIRED   CURRENT   READY   AGE
+replicaset.apps/web-deploy-6bc4dfc596   10        10        10      5m22s
+
+
+> (2) 스케일 업 실행
+$ kubectl scale --replicas=3 deployment.apps/web-deploy
+deployment.apps/web-deploy scaled
+
+
+> (3) 결과
+$ kubectl get all
+NAME                              READY   STATUS    RESTARTS   AGE
+pod/web-deploy-6bc4dfc596-cwjzs   1/1     Running   0          6m33s
+pod/web-deploy-6bc4dfc596-jj94j   1/1     Running   0          6m33s
+pod/web-deploy-6bc4dfc596-qwlll   1/1     Running   0          6m33s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   29d
+
+NAME                         READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/web-deploy   3/3     3            3           6m33s
+
+NAME                                    DESIRED   CURRENT   READY   AGE
+replicaset.apps/web-deploy-6bc4dfc596   3         3         3       6m33s

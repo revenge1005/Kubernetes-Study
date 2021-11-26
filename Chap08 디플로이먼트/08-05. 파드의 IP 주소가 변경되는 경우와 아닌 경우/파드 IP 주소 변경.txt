@@ -1,0 +1,24 @@
+
+> 기본적으로 파드의 IP 주소는 기동 시에 할당되고 종료 시에 회수되어 다른 파드에 재할당 된다
+
+> 즉, 롤아웃이나 롤백, 스케일에 의해 파드가 종료되고 새롭게 만들어질 떄 새로운 IP 주소가 할당된다.
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+$ kubectl get pod -o wide
+NAME                          READY   STATUS    RESTARTS   AGE   IP          NODE         NOMINATED NODE   READINESS GATES
+web-deploy-6bc4dfc596-hrffj   1/1     Running   0          12s   10.40.0.2   k8s-node02   <none>           <none>
+web-deploy-6bc4dfc596-kh7vk   1/1     Running   0          12s   10.32.0.3   k8s-node01   <none>           <none>
+web-deploy-6bc4dfc596-zv7bf   1/1     Running   0          12s   10.40.0.1   k8s-node02   <none>           <none>
+
+> (1) 파드 하나를 삭제
+$  kubectl delete pod web-deploy-6bc4dfc596-hrffj
+pod "web-deploy-6bc4dfc596-hrffj" deleted
+
+> (2) 곧바로 대체 파드가 새로운 IP 주소로 기동함
+$ kubectl get pod -o wide
+NAME                          READY   STATUS    RESTARTS   AGE   IP          NODE         NOMINATED NODE   READINESS GATES
+web-deploy-6bc4dfc596-kh7vk   1/1     Running   0          56s   10.32.0.3   k8s-node01   <none>           <none>
+web-deploy-6bc4dfc596-xv69m   1/1     Running   0          3s    10.32.0.4   k8s-node01   <none>           <none>
+web-deploy-6bc4dfc596-zv7bf   1/1     Running   0          56s   10.40.0.1   k8s-node02   <none>           <none>

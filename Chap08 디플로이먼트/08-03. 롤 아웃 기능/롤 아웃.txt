@@ -1,0 +1,82 @@
+
+> 쿠버네티스의에서의 롤아웃은 컨테이너의 업데이트를 의미한다
+
+> 롤아웃을 하기 위해서는 사전에 새로운 이미지를 빌드하고, 리포지터리에 등록해야 놓아야 한다
+
+> 그리고 새로운 이미지를 매니페스트의 image 항목에 기재하고 'kubectl apply -f'를 적용하면 롤아웃이 시작된다
+
+> 롤아웃을 하는 중에도 사용자로부터의 요청을 처리할 수 있도록 정해진 개수만큼 업데이트를 진행할 수 있다
+
+> 즉, 일정개수만큼정지하고 새로운 파드를 기동하는 것을 반복하는 것이다
+
+> 하지만 새로운 버전과 이전 버전의 컨테이너가 동시에 돌아가는 것이 가능하려면 롤아웃 기능만으로는 충분치 않다
+  (애플리케이션의 설계, 테이블 설계, 캐시 이용 등을 함께 고려해야 한다)
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ 
+> 'RollingUpdateStrategy'의 '25% max unavailable, 25% max surge'라고 표시되어 있다
+
+> 이것은 최대 25%의 파드를 정지할 수 있고, 최대 25%만큼 초과할 수 있음을 의미
+
+> 이번 예시에서는 레플리카의 값 10이다 따라서, 최소 파드 수는 10-10X0.25=7.5 인데, 소수점에서 올려 8이 된다.
+
+> 초과 파드 수는 10+10X0.25=12.5 인데, 소수점에서 올려서 13이 된다
+
+> 정리하면 최소 8개의 파드를 유지하고 최대 13개의 파드가 되도록 롤 아웃이 점진적으로 진행된다
+
+$ kubectl describe deployments web-deploy
+Name:                   web-deploy
+Namespace:              default
+CreationTimestamp:      Fri, 26 Nov 2021 22:50:04 +0900
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=web
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+<이하 생략>
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+> (1) 롤아웃 시작
+
+$ kubectl apply -f deployment3.yml
+deployment.apps/web-deploy configured
+ 
+> (2) Runngin 상태 8개, ContainerCreating 상태 5개
+
+$ kubectl get pod
+NAME                          READY   STATUS              RESTARTS   AGE
+web-deploy-5899d78c9-fllll    0/1     ContainerCreating   0          14s
+web-deploy-5899d78c9-g697d    0/1     ContainerCreating   0          14s
+web-deploy-5899d78c9-mc72c    0/1     ContainerCreating   0          14s
+web-deploy-5899d78c9-s7f6z    0/1     ContainerCreating   0          14s
+web-deploy-5899d78c9-xj8nc    0/1     ContainerCreating   0          14s
+web-deploy-6bc4dfc596-cqsf2   1/1     Running             0          14s
+web-deploy-6bc4dfc596-cwjzs   1/1     Running             0          22m
+web-deploy-6bc4dfc596-jj94j   1/1     Running             0          22m
+web-deploy-6bc4dfc596-qwlll   1/1     Running             0          22m
+web-deploy-6bc4dfc596-twjc4   1/1     Running             0          14s
+web-deploy-6bc4dfc596-ws8zd   1/1     Running             0          14s
+web-deploy-6bc4dfc596-wz4gb   1/1     Running             0          14s
+web-deploy-6bc4dfc596-x8nh8   1/1     Running             0          14s
+
+> (3) 롤아웃 완료
+
+$ kubectl get pod
+NAME                         READY   STATUS    RESTARTS   AGE
+web-deploy-5899d78c9-fllll   1/1     Running   0          2m5s
+web-deploy-5899d78c9-fxrz6   1/1     Running   0          108s
+web-deploy-5899d78c9-g697d   1/1     Running   0          2m5s
+web-deploy-5899d78c9-mc72c   1/1     Running   0          2m5s
+web-deploy-5899d78c9-pf5mz   1/1     Running   0          106s
+web-deploy-5899d78c9-qhbgs   1/1     Running   0          110s
+web-deploy-5899d78c9-s7f6z   1/1     Running   0          2m5s
+web-deploy-5899d78c9-szbgs   1/1     Running   0          106s
+web-deploy-5899d78c9-t6qvn   1/1     Running   0          108s
+web-deploy-5899d78c9-xj8nc   1/1     Running   0          2m5s
