@@ -270,7 +270,7 @@ protocol
 nodePort
 </td>
 <td>
-생략 시에는 시스템이 자동으로 할당 <br> 타입이 NodePort, LoadBalancer인 경우 모든 노드에서 포트를 공개 <br> 설정한 포트가 이미 사용 중인 경우에는 오브젝트 생성에 실패
++ 생략 시에는 시스템이 자동으로 할당 <br> + 타입이 NodePort, LoadBalancer인 경우 모든 노드에서 포트를 공개 <br> + 설정한 포트가 이미 사용 중인 경우에는 오브젝트 생성에 실패
 </td>
 </tr>
 <tr>
