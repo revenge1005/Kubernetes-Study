@@ -1,4 +1,8 @@
-1. 이번에 사용한 kubectl 명령
+# 1. 서비스 타입
+
+
+
+# 2. 이번에 사용한 kubectl 명령
 
 <table>
 <tr>
@@ -42,7 +46,7 @@ kubectl describe service
 
 ----
 
-# 2. 서비스의 매니페스트 예시
+# 3. 서비스의 매니페스트 예시
 
 ### (1) deploy.yml
 ```
@@ -144,3 +148,61 @@ spec
 </tr>
 </table>
 
+### 표 2 서비스 사양
+<table>
+<tr>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+항목 
+</small>
+</p>
+</th>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+설명
+</small>
+</p>
+</th>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+tyep
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+서비스 공개 방법을 설정 <br> 【선택 가능한 타입】: ClusterIP, NodePort, LoadBalancer, ExternalName
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+kind
+</td>
+<td>
+Service 설정
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+metadata
+</td>
+<td>
++ name에 네임스페이스 내 유일한 이름을 설정 <br> + 여기서 설정한 이름은 내부 DNS에 등록되며, IP 주소 해결에 사용 <br> + 또한, 이후 기동된 파드의 환경 변수에 설정
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+spec
+</td>
+<td>
+서비스 사양
+</td>
+</tr>
+</table>
