@@ -82,7 +82,7 @@ spec:                                       ## 표 2 파드 사양
 <img width="441" height="1">
 <p> 
 <small>
-커맨드 
+항목 
 </small>
 </p>
 </th>
@@ -142,7 +142,7 @@ spec
 <img width="441" height="1">
 <p> 
 <small>
-커맨드 
+항목 
 </small>
 </p>
 </th>
@@ -202,7 +202,7 @@ volumes
 <img width="441" height="1">
 <p> 
 <small>
-커맨드 
+항목 
 </small>
 </p>
 </th>

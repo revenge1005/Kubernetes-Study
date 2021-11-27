@@ -105,7 +105,7 @@ spec:                                           #> 표 2 디플로이먼트 사�
 <img width="441" height="1">
 <p> 
 <small>
-커맨드 
+항목 
 </small>
 </p>
 </th>
@@ -165,7 +165,7 @@ spec
 <img width="441" height="1">
 <p> 
 <small>
-커맨드 
+항목 
 </small>
 </p>
 </th>
@@ -215,7 +215,7 @@ template
 <img width="441" height="1">
 <p> 
 <small>
-커맨드 
+항목 
 </small>
 </p>
 </th>
