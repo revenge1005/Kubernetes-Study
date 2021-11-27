@@ -276,10 +276,10 @@ nodePort
 <tr>
 <td>
 <!-- REMOVE THE BACKSLASHES -->
-clusterIP
+targetPort
 </td>
 <td>
-+ 이 항목을 생략하면 대표 IP 주소가 자동으로 할당된다. <br> + 그리고 None을 설정하면 헤드리스로 동작
++ 생략 시에는 port와 돌일한 값이 사용됨 <br> + selector에 의해 대응되는 파드가 공개하는 포트번호 또는 포트 이름을 설정
 </td>
 </tr>
 </table>
