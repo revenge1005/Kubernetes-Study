@@ -54,6 +54,7 @@ ExternalName
 </td>
 <td>
 K8s 클러스터 내의 파드에서 외부 IP 주소에 서비스의 이름으로 접근할 수 있다.
+
 </td>
 </tr>
 </table>
@@ -143,7 +144,7 @@ spec:                                              #> 표 2, type이 생략되�
 
 ----
 
-# 3. 매니페스트 작성 방법
+# 4. 매니페스트 작성 방법
 
 [쿠버네티스 API 레퍼런스 - 서비스 URL](https://kubernetes.io/docs/reference/kubernetes-api/service-resources/service-v1/)
 
@@ -341,3 +342,102 @@ targetPort
 </td>
 </tr>
 </table>
+
+----
+
+# 5. 서비스 생성과 기능 확인
+
+### (1) 매니페스트 배포
+```
+$ kubectl apply -f deploy.yml
+deployment.apps/web-deploy created
+
+$ kubectl apply -f service.yml
+service/web-service created
+
+```
+
+### (2) 디플로이먼트와 서비스 상태 출력
+```
+$ kubectl get all -o wide
+NAME                              READY   STATUS    RESTARTS   AGE   IP          NODE         NOMINA
+pod/web-deploy-86cd4d65b9-2v5p2   1/1     Running   0          11s   10.40.0.2   k8s-node02   <none>
+pod/web-deploy-86cd4d65b9-p4mkt   1/1     Running   0          11s   10.32.0.3   k8s-node01   <none>
+pod/web-deploy-86cd4d65b9-pg7fw   1/1     Running   0          11s   10.40.0.1   k8s-node02   <none>
+
+NAME                  TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+service/kubernetes    ClusterIP   10.96.0.1       <none>        443/TCP   29d   <none>
+service/web-service   ClusterIP   10.96.182.208   <none>        80/TCP    6s    app=web
+
+NAME                         READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES         SELE
+deployment.apps/web-deploy   3/3     3            3           11s   nginx        nginx:latest   app=
+
+NAME                                    DESIRED   CURRENT   READY   AGE   CONTAINERS   IMAGES
+replicaset.apps/web-deploy-86cd4d65b9   3         3         3       11s   nginx        nginx:latest
+```
+
+### (3) 대화형 컨테이너를 기동하여 서비스에 요청 전송
+```
+$  kubectl run -it busybox --restart=Never --rm --image=busybox sh
+If you don't see a command prompt, try pressing enter.
+
+/ # wget -q -O - http://web-service
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+```
+
+### (4) 서비스 관련 환경 변수
+```
+/ # env | grep WEB_SERVICE
+WEB_SERVICE_PORT=tcp://10.96.182.208:80
+WEB_SERVICE_SERVICE_PORT=80
+WEB_SERVICE_PORT_80_TCP_ADDR=10.96.182.208
+WEB_SERVICE_PORT_80_TCP_PORT=80
+WEB_SERVICE_PORT_80_TCP_PROTO=tcp
+WEB_SERVICE_PORT_80_TCP=tcp://10.96.182.208:80
+WEB_SERVICE_SERVICE_HOST=10.96.182.208
+```
+
+### (5) 각 파드의 index.html에 호스트명을 적는 셸
+```
+$ for pod in $(kubectl get pods |awk 'NR>1 {print $1}'|grep web-deploy); \
+do kubectl exec $pod -- /bin/sh -c "hostname>/usr/share/nginx/html/index.html"; done
+
+```
+
+### (6) 서비스 접속과 부하분산
+```
+$ kubectl run -it busybox --restart=Never --rm --image=busybox sh
+If you don't see a command prompt, try pressing enter.
+/ # while true; do wget -q -O - http://web-service; sleep 1;done
+web-deploy-86cd4d65b9-2v5p2
+web-deploy-86cd4d65b9-p4mkt
+web-deploy-86cd4d65b9-p4mkt
+web-deploy-86cd4d65b9-pg7fw
+web-deploy-86cd4d65b9-p4mkt
+web-deploy-86cd4d65b9-p4mkt
+web-deploy-86cd4d65b9-2v5p2
+web-deploy-86cd4d65b9-p4mkt
+...
+```
