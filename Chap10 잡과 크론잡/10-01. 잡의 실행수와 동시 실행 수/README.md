@@ -28,6 +28,8 @@ spec:                                   # 표 2 배치잡의 사양
 
 # 3. 매니페스트 작성 방법
 
+https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/job-v1/
+
 ### (1) 배치잡 API
 <table>
 <tr>
