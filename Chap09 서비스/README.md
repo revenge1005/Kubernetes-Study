@@ -175,7 +175,7 @@ tyep
 </td>
 <td>
 <!-- REMOVE THE BACKSLASHES -->
-서비스 공개 방법을 설정 <br> 【선택 가능한 타입】: ClusterIP, NodePort, LoadBalancer, ExternalName
+서비스 공개 방법을 설정 <br> 【타입 종류】: ClusterIP, NodePort, LoadBalancer, ExternalName
 </td>
 </tr>
 <tr>
