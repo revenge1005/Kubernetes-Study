@@ -181,28 +181,105 @@ tyep
 <tr>
 <td>
 <!-- REMOVE THE BACKSLASHES -->
-kind
+ports
 </td>
 <td>
-Service 설정
-</td>
-</tr>
-<tr>
-<td>
-<!-- REMOVE THE BACKSLASHES -->
-metadata
-</td>
-<td>
-+ name에 네임스페이스 내 유일한 이름을 설정 <br> + 여기서 설정한 이름은 내부 DNS에 등록되며, IP 주소 해결에 사용 <br> + 또한, 이후 기동된 파드의 환경 변수에 설정
+서비스에 의해 공개되는 포트 번호 (표3)
 </td>
 </tr>
 <tr>
 <td>
 <!-- REMOVE THE BACKSLASHES -->
-spec
+selector
 </td>
 <td>
-서비스 사양
+여기서 설정한 라벨과 일치하는 파드에 요청을 전송
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+sessionAffinity
+</td>
+<td>
+설정이 가능한 세션 어피니티는 ClusterIP, 생략 시 None으로 설정됨
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+clusterIP
+</td>
+<td>
+이 항목을 생략하면 대표 IP 주소가 자동으로 할당된다. <br> 그리고 None을 설정하면 헤드리스로 동작
+</td>
+</tr>
+</table>
+
+### 표 3 서비스 파드 사양
+<table>
+<tr>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+항목 
+</small>
+</p>
+</th>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+설명
+</small>
+</p>
+</th>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+port
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+(필수 항목) 이 서비스에 의해 공개되는 포트번호
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+name
+</td>
+<td>
+port가 하나인 경우는 생략할 수 있고, 여러 개인 경우 필수 설정 <br> 각 포트의 이름은 서비스 스펙 내에서 유일해야 함
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+protocol
+</td>
+<td>
+생략 시에는 TCP가 설정됨 
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+nodePort
+</td>
+<td>
+생략 시에는 시스템이 자동으로 할당 <br> tyep이 NodePort나 LoadBalancer인 경우 모든 노드에서 포트를 공개 <br> 설정한 포트가 이미 사용 중인 경우에는 오브젝트 생성에 실패
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+clusterIP
+</td>
+<td>
+이 항목을 생략하면 대표 IP 주소가 자동으로 할당된다. <br> 그리고 None을 설정하면 헤드리스로 동작
 </td>
 </tr>
 </table>
