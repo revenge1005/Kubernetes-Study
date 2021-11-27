@@ -150,6 +150,8 @@ activeDeadlineSeconds
 잡의 최장 실행 시간을 초단위로 지정, 지정 시간이 지나면 강제 종료
 </td>
 </tr>
+<tr>
+<td>
 <!-- REMOVE THE BACKSLASHES -->
 backoffLimit
 </td>
