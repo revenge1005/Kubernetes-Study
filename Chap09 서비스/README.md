@@ -1,6 +1,64 @@
 # 1. 서비스 타입
 
+<table>
+<tr>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+서비스 타입 
+</small>
+</p>
+</th>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+설명
+</small>
+</p>
+</th>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+ClusterIP
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+기본 설정값으로, 클러스터 내부의 파드에서 서비스의 이름으로 접근할 수 있다.
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+NodePort
+</td>
+<td>
+ClusterIP의 접근 범위뿐만 아니라 K8s 클러스터 외부에서도 노드의 IP주소와 포트번호로 접근 가능
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+LoadBalancer
+</td>
+<td>
+NodePort의 접근 범위뿐만 아니라 K8s 클러스터 외부에서 대표 IP 주소로 접근할 수 있다.
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+ExternalName
+</td>
+<td>
+K8s 클러스터 내의 파드에서 외부 IP 주소에 서비스의 이름으로 접근할 수 있다.
+</td>
+</tr>
+</table>
 
+----
 
 # 2. 이번에 사용한 kubectl 명령
 
