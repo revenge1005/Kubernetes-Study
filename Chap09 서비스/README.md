@@ -279,7 +279,7 @@ nodePort
 targetPort
 </td>
 <td>
-+ 생략 시에는 port와 돌일한 값이 사용됨 <br> + selector에 의해 대응되는 파드가 공개하는 포트번호 또는 포트 이름 설정
++ 생략 시에는 port와 돌일한 값이 사용됨 <br> + selector에 의해 대응되는 파드가 공개하는 포트번호 또는 포트이름 설정
 </td>
 </tr>
 </table>
