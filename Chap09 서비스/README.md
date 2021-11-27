@@ -85,7 +85,7 @@ spec:                                              #> 표 2, type이 생략되�
 
 [쿠버네티스 API 레퍼런스 - 서비스 URL](https://kubernetes.io/docs/reference/kubernetes-api/service-resources/service-v1/)
 
-### 표 1 디플로이먼트 API 
+### 표 1 서비스 API 
 <table>
 <tr>
 <th align="center">
@@ -130,7 +130,7 @@ Service 설정
 metadata
 </td>
 <td>
-ㆍname에 네임스페이스 내 유일한 이름을 설정 <br> ㆍ여기서 설정한 이름은 내부 DNS에 등록되며, IP 주소 해결에 사용 <br> ㆍ또한, 이후 기동된 파드의 환경 변수에 설정
++ name에 네임스페이스 내 유일한 이름을 설정 <br> + 여기서 설정한 이름은 내부 DNS에 등록되며, IP 주소 해결에 사용 <br> + 또한, 이후 기동된 파드의 환경 변수에 설정
 </td>
 </tr>
 <tr>
