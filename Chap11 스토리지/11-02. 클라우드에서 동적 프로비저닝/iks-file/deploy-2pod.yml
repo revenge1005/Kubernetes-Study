@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dep2pod-file
+  labels:
+    app: dep2pod-file
+spec:
+  replicas: 2              ## 2개의 파드 기동
+  selector:
+    matchLabels:
+      app: dep2pod-file
+  template:
+    metadata:
+      labels:
+        app: dep2pod-file
+    spec:
+      containers:
+      - image: ubuntu
+        name: ubuntu
+        volumeMounts:
+        - name: fs
+          mountPath: /mnt
+        command: ["/usr/bin/tail","-f","/dev/null"]
+      volumes:
+      - name: fs
+        persistentVolumeClaim:
+          claimName: bronze-file

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: bronze-file
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "ibmc-file-bronze"
+  labels:
+    billingType: "hourly"
+spec:
+  accessModes:
+    - ReadWriteMany  ## File(NFS)이므로 복수의 클라이언트에서 마운트 가능
+  resources:
+    requests:
+      storage: 20Gi  ## 프로비저닝 요구용량(GB)
