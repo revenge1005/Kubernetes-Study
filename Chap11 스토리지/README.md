@@ -51,7 +51,15 @@ https://kubernetes.io/ko/docs/concepts/storage/volumes/
 
 ![논리 볼륨을 동적으로 프로비저닝 하는 경우](https://user-images.githubusercontent.com/42735894/143770117-3669be76-a620-4e21-a8d2-ba64d498b19b.PNG)
 
+----
+
+# 3. PVC 매니페스트 작성 방법
+
+https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/persistent-volume-claim-v1/
+
 ```
+### pvc.yml
+
 apiVersion: v1  ##「표１PersistentVolumeClaim v1 core」
 kind: PersistentVolumeClaim
 metadata:       ##「표2 ObjectMeta v1 meta」
@@ -64,10 +72,6 @@ spec:           ##「표3 PersistentVolumeClaimSpec v1 core」
     requests:
       storage: 2Gi
 ```
-
-# 3. 매니페스트 작성 방법
-
-https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/persistent-volume-claim-v1/
 
 ### (1) 표1 퍼시스턴트 볼륨 요구 API
 <table>
@@ -238,3 +242,167 @@ resources
 </td>
 </tr>
 </table>
+
+
+### (4) 표4 자원 요구 사항
+<table>
+<tr>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+항목 
+</small>
+</p>
+</th>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+설명
+</small>
+</p>
+</th>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+requests
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+퍼시스턴트 볼륨의 용량을 지정
+</td>
+</tr>
+</table>
+
+
+```
+### pod.yml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod1
+spec:
+  volumes:               ##「표5 Volume v1 core」참고
+  - name: pvc1
+    persistentVolumeClaim:
+      claimName: data1   ## <-- PVC의 이름 설정
+  containers:
+  - name: ubuntu
+    image: ubuntu:16.04
+    volumeMounts:        ## 「표6 VolumeMount v1 core」참고
+    - name: pvc1
+      mountPath: /mnt    ## <-- 컨테이너 상 마운트 경로
+```
+
+### (5) 표5 볼륨 설정
+<table>
+<tr>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+항목 
+</small>
+</p>
+</th>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+설명
+</small>
+</p>
+</th>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+name
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+볼륨명
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+persistentVolumeClaim
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+PVC 이름
+</td>
+</tr>
+</table>
+
+
+### (6) 컨테이너 내의 마운트 경로 지정
+<table>
+<tr>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+항목 
+</small>
+</p>
+</th>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+설명
+</small>
+</p>
+</th>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+name
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+파드 스펙에 기재한 볼륨 이름을 기술
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+mountPath
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+PV의 컨테이너 내 마운트 경로
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+subPath
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+PV의 특정 디렉토리에 마운트하고 싶은 경우 이 옵션을 지정 <br>
+생략하면 PV의 루트에 마운트 설정, 클라우드에서 PV 수를 정략하고 싶을 때 사용
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+readOnly
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+읽기 전용으로 하고 싶은 경우 true로 설정
+</td>
+</tr>
+</table>
+
+----
+
+# 4. PV 매니페스트 작성 방법
