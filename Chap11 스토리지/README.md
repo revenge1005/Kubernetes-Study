@@ -49,3 +49,137 @@ https://kubernetes.io/ko/docs/concepts/storage/volumes/
 
 # 4. PVC(Persistent Volume Claim) 매니페스트: pvc.yml
 
+![논리 볼륨을 동적으로 프로비저닝 하는 경우](https://user-images.githubusercontent.com/42735894/143770117-3669be76-a620-4e21-a8d2-ba64d498b19b.PNG)
+
+```
+apiVersion: v1  ##「표１PersistentVolumeClaim v1 core」
+kind: PersistentVolumeClaim
+metadata:       ##「표2 ObjectMeta v1 meta」
+  name: data1
+spec:           ##「표3 PersistentVolumeClaimSpec v1 core」
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: standard
+  resources:    ##「표4」
+    requests:
+      storage: 2Gi
+```
+
+# 3. 매니페스트 작성 방법
+
+https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/persistent-volume-claim-v1/
+
+### (1) 퍼시스턴트 볼륨 요구 API
+<table>
+<tr>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+항목 
+</small>
+</p>
+</th>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+설명
+</small>
+</p>
+</th>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+apiVersion
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+v1 설정
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+kind
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+PersistentVolumeClaim 설정
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+metadata
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+이름, 레이블, 주석 등의 정보 기술 (표2)
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+spec
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+스토리지 요구 사양을 기술 (표3)
+</td>
+</tr>
+</table>
+
+
+### (2) ObejctMeta v1 meta
+<table>
+<tr>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+항목 
+</small>
+</p>
+</th>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+설명
+</small>
+</p>
+</th>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+annotations
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+스토리지 시스테에 념겨 주는 파라미터나 스토리지 클래스를 기술하기도 함
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+labels
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+IKS에서는 월 단위나 시간 단위의 과금을 클라우드의 <br> 스토리지 시스템에 부여하기 위해 사용
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+name
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+오브젝트를 특정하기 위한 필수 항목으로 네임스페이스 <br> 내에서 유일한 이름이어야 함
+</td>
+</tr>
+</table>
