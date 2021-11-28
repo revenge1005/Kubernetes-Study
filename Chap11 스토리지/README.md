@@ -28,3 +28,17 @@ https://kubernetes.io/ko/docs/concepts/storage/volumes/
 |gcePersistentDisk|클라우드 서비스|클러스터|Once|
 |IBM Cloud Storage-File Storage|클라우드 서비스|클러스터|Many|
 |IBM Cloud Storage-Block Storage|클라우드 서비스|클러스터|Once|
+
+----
+
+# 3. 스토리지의 추상화와 자동화
+
++ (A) 환경은, 퍼블릭 클라우드 환경의 방식으로 매니페스트에 스토리지 클래스를 기술하여 적용하면, 퍼시스턴트 볼륨이 동적으로 프로비저닝 된다.
+
++ 온프레미스 환경에서도 GlusterFS를 이용하면 동적으로 프로비저닝할 수 있다.
+
++ (B) '직접 스토리지를 설정하는 경우'에서는 프로비저너나 스토리지 클래스가 없어서, PVC의 매니페스트에 직접 PV명을 지정하고 있다.
+
++ 그리고 PV 작성과 스토리지 설정을 직접해야 한다.
+
++ 예를 들어 PV를 작성 매니페스트에 NFS 서버의 IP 주소나, export path 등 NFS에 접속하기 위한 설정을 기술해야 한다.
