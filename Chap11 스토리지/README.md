@@ -219,21 +219,22 @@ accessModes
 <tr>
 <td>
 <!-- REMOVE THE BACKSLASHES -->
-labels
+storageClassName
 </td>
 <td>
 <!-- REMOVE THE BACKSLASHES -->
-IKS에서는 월 단위나 시간 단위의 과금을 클라우드의 스토리지 <br> 시스템에 부여하기 위해 사용
+생략하면 디폴트 스토리지 클래스가 선택됨 <br>
+선택 가능한 스토리지 클래스의 목록 <br> kubectl get storageclass로 확인 가능
 </td>
 </tr>
 <tr>
 <td>
 <!-- REMOVE THE BACKSLASHES -->
-name
+resources
 </td>
 <td>
 <!-- REMOVE THE BACKSLASHES -->
-오브젝트를 특정하기 위한 필수 항목으로 네임스페이스 내에서 <br> 유일한 이름이어야 함
+스토리지 용량 설정 (표4)
 </td>
 </tr>
 </table>
