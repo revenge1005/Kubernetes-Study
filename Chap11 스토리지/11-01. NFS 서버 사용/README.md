@@ -188,7 +188,7 @@ GlusterFS / hostPath / local ...
 </td>
 <td>
 <!-- REMOVE THE BACKSLASHES -->
-스토리지 시스템별 파라미터를 기술은 다르므로 쿠버네티스 API 내용 참고
+스토리지 시스템별 파라미터를 기술은 쿠버네티스 API 내용 참고
 </td>
 </tr>
 </table>
