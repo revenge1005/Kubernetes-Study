@@ -168,7 +168,7 @@ accessMode
 </td>
 <td>
 <!-- REMOVE THE BACKSLASHES -->
-`[PVC 사양 참고](https://github.com/revenge1005/Kubernetes-Study/tree/main/Chap11%20%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80#3-%ED%91%9C3-%ED%8D%BC%EC%8B%9C%EC%8A%A4%ED%84%B4%ED%8A%B8-%EB%B3%BC%EB%A5%A8-%EC%9A%94%EA%B5%AC-%EC%82%AC%EC%96%91)`
+<a href="https://github.com/revenge1005/Kubernetes-Study/tree/main/Chap11%20%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80#3-%ED%91%9C3-%ED%8D%BC%EC%8B%9C%EC%8A%A4%ED%84%B4%ED%8A%B8-%EB%B3%BC%EB%A5%A8-%EC%9A%94%EA%B5%AC-%EC%82%AC%EC%96%91">PVC 사양 참고</a>
 </td>
 </tr>
 <tr>
