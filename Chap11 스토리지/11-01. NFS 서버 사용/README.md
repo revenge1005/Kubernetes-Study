@@ -131,6 +131,7 @@ name
 </tr>
 </table>
 
+
 ### (3) 표3 퍼시스턴트 볼륨 사양
 <table>
 <tr>
@@ -189,6 +190,113 @@ GlusterFS / hostPath / local ...
 <td>
 <!-- REMOVE THE BACKSLASHES -->
 스토리지 시스템별 파라미터를 기술은 쿠버네티스 API 내용 참고
+</td>
+</tr>
+</table>
+
+
+### (4) 표4 NFS 서버의 주소와 공개 경로
+<table>
+<tr>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+항목 
+</small>
+</p>
+</th>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+설명
+</small>
+</p>
+</th>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+path
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+NFS 서버가 export하는 경로
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+server
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+NFS 서버의 DNS명 또는 IP 주소
+</td>
+</tr>
+</table>
+
+-----
+
+# 3. PVC(Persistent Volume Claim)의 매니페스트 작성: nfs-pvc.yml
+
+```
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-1
+spec:
+  accessModes:
+  - ReadWriteMany
+  storageClassName: "" ## PV를 라벨로 매치하기 위해 Null을 설정
+  resources:
+    requests:
+      storage: "100Mi"
+  selector:            ## 대응하는 PV의 라벨을 설정
+    matchLabels:
+      name: pv-nfs-1
+```
+
+### (1) PersistentVolumeClaimSpec 
+<table>
+<tr>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+항목 
+</small>
+</p>
+</th>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+설명
+</small>
+</p>
+</th>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+storageClassName
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+스토리지 클래스가 없는 퍼시스턴트 볼륨을 사용하므로 문자열 ""을 설정. <br>
+이 항목을 생략하면 디폴트의 스토리지 클래스가 사용되기 때문에 반드시 "" 설정이 필요
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+selector
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+접속할 PV의 metadata.labels와 일치해야 함
 </td>
 </tr>
 </table>
