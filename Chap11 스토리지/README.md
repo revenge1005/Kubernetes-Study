@@ -223,8 +223,8 @@ storageClassName
 </td>
 <td>
 <!-- REMOVE THE BACKSLASHES -->
-생략하면 디폴트 스토리지 클래스가 선택됨 <br>
-선택 가능한 스토리지 클래스의 목록 <br> kubectl get storageclass로 확인 가능
+생략하면 디폴트 스토리지 클래스가 선택됨 선택 가능한 스토리지 <br> 
+클래스의 목록  kubectl get storageclass로 확인 가능
 </td>
 </tr>
 <tr>
