@@ -42,3 +42,9 @@ https://kubernetes.io/ko/docs/concepts/storage/volumes/
 + 그리고 PV 작성과 스토리지 설정을 직접해야 한다.
 
 + 예를 들어 PV를 작성 매니페스트에 NFS 서버의 IP 주소나, export path 등 NFS에 접속하기 위한 설정을 기술해야 한다.
+
+![스토리지 추상화와 자동화](https://user-images.githubusercontent.com/42735894/143769153-1113216a-ef8e-4ade-a96e-1329745c1bbf.PNG)
+
+----
+
+# 4. 
