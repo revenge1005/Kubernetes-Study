@@ -325,18 +325,40 @@ persistentvolumeclaim/nfs-1   Bound    nfs-1    100Mi      RWX                  
 # 5. 결과 확인 - PVC의 볼륨을 마운트하는 디폴로이먼트
 
 ```
+$ kubectl get pod
+NAME                         READY   STATUS    RESTARTS   AGE
+nfs-client-7ff95d88b-74mtp   1/1     Running   0          21s
+nfs-client-7ff95d88b-rvgq2   1/1     Running   0          21s
+
 $ kubectl exec -it nfs-client-7ff95d88b-74mtp bash
 kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
+
 root@nfs-client-7ff95d88b-74mtp:/# df -h
 Filesystem                       Size  Used Avail Use% Mounted on
 overlay                          9.8G  2.6G  6.8G  28% /
 tmpfs                             64M     0   64M   0% /dev
 tmpfs                            980M     0  980M   0% /sys/fs/cgroup
-**192.168.219.129:/home/share/nfs   29G  5.6G   22G  21% /mnt**
-/dev/mapper/ubuntu--lvm-var      9.8G  2.6G  6.8G  28% /etc/hosts
-shm                               64M     0   64M   0% /dev/shm
-tmpfs                            1.9G   12K  1.9G   1% /run/secrets/kubernetes.io/serviceaccount
-tmpfs                            980M     0  980M   0% /proc/acpi
-tmpfs                            980M     0  980M   0% /proc/scsi
-tmpfs                            980M     0  980M   0% /sys/firmware
+192.168.219.129:/home/share/nfs   29G  5.6G   22G  21% /mnt
+
+root@nfs-client-7ff95d88b-74mtp:/# ls -lR > /mnt/test.dat
+
+root@nfs-client-7ff95d88b-74mtp:/# md5sum /mnt/test.dat
+2ffcda59cfc06e6af491a5e36c70256f  /mnt/test.dat
+
+root@nfs-client-7ff95d88b-74mtp:/# exit
+
+## 다른 파드에서 확인
+
+$ kubectl exec -it nfs-client-7ff95d88b-rvgq2 bash
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
+
+root@nfs-client-7ff95d88b-rvgq2:/# df -h
+Filesystem                       Size  Used Avail Use% Mounted on
+overlay                          9.8G  2.4G  6.9G  26% /
+tmpfs                             64M     0   64M   0% /dev
+tmpfs                            980M     0  980M   0% /sys/fs/cgroup
+192.168.219.129:/home/share/nfs   29G  5.6G   22G  21% /mnt
+
+root@nfs-client-7ff95d88b-rvgq2:/# md5sum /mnt/test.dat
+2ffcda59cfc06e6af491a5e36c70256f  /mnt/test.dat
 ```
