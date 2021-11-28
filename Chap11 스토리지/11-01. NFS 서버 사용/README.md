@@ -300,3 +300,43 @@ selector
 </td>
 </tr>
 </table>
+
+----
+
+# 4. 결과 확인 - NFS 서버와 마운트
+
+```
+$ kubectl apply -f  nfs-pv.yml
+persistentvolume/nfs-1 created
+
+$ kubectl apply -f  nfs-pvc.yml
+persistentvolumeclaim/nfs-1 created
+
+$ kubectl get pv,pvc
+NAME                     CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM           STORAGECLASS   REASON   AGE
+persistentvolume/nfs-1   100Mi      RWX            Retain           Bound    default/nfs-1                           39s
+
+NAME                          STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+persistentvolumeclaim/nfs-1   Bound    nfs-1    100Mi      RWX                           35s
+```
+
+----
+
+# 5. 결과 확인 - PVC의 볼륨을 마운트하는 디폴로이먼트
+
+```
+$ kubectl exec -it nfs-client-7ff95d88b-74mtp bash
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
+root@nfs-client-7ff95d88b-74mtp:/# df -h
+Filesystem                       Size  Used Avail Use% Mounted on
+overlay                          9.8G  2.6G  6.8G  28% /
+tmpfs                             64M     0   64M   0% /dev
+tmpfs                            980M     0  980M   0% /sys/fs/cgroup
+**192.168.219.129:/home/share/nfs   29G  5.6G   22G  21% /mnt
+/dev/mapper/ubuntu--lvm-var      9.8G  2.6G  6.8G  28% /etc/hosts
+shm                               64M     0   64M   0% /dev/shm
+tmpfs                            1.9G   12K  1.9G   1% /run/secrets/kubernetes.io/serviceaccount
+tmpfs                            980M     0  980M   0% /proc/acpi
+tmpfs                            980M     0  980M   0% /proc/scsi
+tmpfs                            980M     0  980M   0% /sys/firmware
+```

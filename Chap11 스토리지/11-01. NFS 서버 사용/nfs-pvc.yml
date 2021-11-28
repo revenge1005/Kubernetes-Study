@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-1
+spec:
+  accessModes:
+  - ReadWriteMany
+  storageClassName: "" ## PV를 라벨로 매치하기 위해 Null을 설정
+  resources:
+    requests:
+      storage: "100Mi"
+  selector:            ## 대응하는 PV의 라벨을 설정
+    matchLabels:
+      name: pv-nfs-1
