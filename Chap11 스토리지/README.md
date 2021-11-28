@@ -212,7 +212,7 @@ accessModes
 </td>
 <td>
 <!-- REMOVE THE BACKSLASHES -->
-스토리지 시스테에 념겨 주는 파라미터나 스토리지 클래스를 <br> 기술하기도 함스토리지를 복수의 노드에서 마운트할 수 있는지, <br> 
+스토리지 시스테에 념겨 주는 파라미터나 스토리지 클래스를 <br> 기술하기도 함, 스토리지를 복수의 노드에서 마운트할 수 있는지 <br> 
 또는 단일  노드에서만 마운트할 수 있는지 선택 <br> 
 + ReadWriteOnce: 단일 노드에서만 read/write 액세스 허용 <br> + ReadOnlyMany: 복수 노드의 read 액세스 허용 <br>
 + ReadWriteMany: 복수 노드의 read/write 액세스 허용
