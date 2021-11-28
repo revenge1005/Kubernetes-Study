@@ -332,7 +332,7 @@ Filesystem                       Size  Used Avail Use% Mounted on
 overlay                          9.8G  2.6G  6.8G  28% /
 tmpfs                             64M     0   64M   0% /dev
 tmpfs                            980M     0  980M   0% /sys/fs/cgroup
-**192.168.219.129:/home/share/nfs   29G  5.6G   22G  21% /mnt
+**192.168.219.129:/home/share/nfs   29G  5.6G   22G  21% /mnt**
 /dev/mapper/ubuntu--lvm-var      9.8G  2.6G  6.8G  28% /etc/hosts
 shm                               64M     0   64M   0% /dev/shm
 tmpfs                            1.9G   12K  1.9G   1% /run/secrets/kubernetes.io/serviceaccount
