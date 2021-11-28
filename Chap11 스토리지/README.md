@@ -47,4 +47,5 @@ https://kubernetes.io/ko/docs/concepts/storage/volumes/
 
 ----
 
-# 4. 
+# 4. PVC(Persistent Volume Claim) 매니페스트: pvc.yml
+
