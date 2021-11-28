@@ -1,7 +1,7 @@
 
 # 1. 스토리지의 종류와 클러스터 구성
 
-
+![스토리지의 종류와 클러스터 구성](https://user-images.githubusercontent.com/42735894/143768109-d62ad050-0eb1-493e-b2d1-add5726bf426.PNG)
 
 ----
 
