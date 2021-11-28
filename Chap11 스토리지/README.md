@@ -69,7 +69,7 @@ spec:           ##「표3 PersistentVolumeClaimSpec v1 core」
 
 https://kubernetes.io/docs/reference/kubernetes-api/config-and-storage-resources/persistent-volume-claim-v1/
 
-### (1) 퍼시스턴트 볼륨 요구 API
+### (1) 표1 퍼시스턴트 볼륨 요구 API
 <table>
 <tr>
 <th align="center">
@@ -132,7 +132,7 @@ spec
 </table>
 
 
-### (2) ObejctMeta v1 meta
+### (2) 표2 ObejctMeta v1 meta
 <table>
 <tr>
 <th align="center">
@@ -160,6 +160,62 @@ annotations
 <td>
 <!-- REMOVE THE BACKSLASHES -->
 스토리지 시스테에 념겨 주는 파라미터나 스토리지 클래스를 <br> 기술하기도 함
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+labels
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+IKS에서는 월 단위나 시간 단위의 과금을 클라우드의 스토리지 <br> 시스템에 부여하기 위해 사용
+</td>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+name
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+오브젝트를 특정하기 위한 필수 항목으로 네임스페이스 내에서 <br> 유일한 이름이어야 함
+</td>
+</tr>
+</table>
+
+
+### (3) 표3 퍼시스턴트 볼륨 요구 사양
+<table>
+<tr>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+항목 
+</small>
+</p>
+</th>
+<th align="center">
+<img width="441" height="1">
+<p> 
+<small>
+설명
+</small>
+</p>
+</th>
+</tr>
+<tr>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+accessModes
+</td>
+<td>
+<!-- REMOVE THE BACKSLASHES -->
+스토리지 시스테에 념겨 주는 파라미터나 스토리지 클래스를 <br> 기술하기도 함
+스토리지를 복수의 노드에서 마운트할 수 있는지, 또는 단일 <br> 노드에서만 마운트할 수 있는지 아래의 키워드로 선택 <br> 
++ ReadWriteOnce: 단일 노드에서만 read/write 액세스 허용 <br> + ReadOnlyMany: 복수 노드의 read 액세스 허용 <br>
++ ReadWriteMany: 복수 노드의 read/write 액세스 허용
 </td>
 </tr>
 <tr>
