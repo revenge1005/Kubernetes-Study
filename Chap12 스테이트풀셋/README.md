@@ -167,3 +167,101 @@ spec:                       ## 표2 스테이트풀셋 사양
 |------|---|
 |metadata.name|파드 수에 맞는 PVC가 작성되며 이 이름은 PVC명의 접두어가 됨|
 |spec|볼륨의 사양을 기술|
+
+----
+
+# 4. 결과 - 스테이트풀셋으로 MySQL 서버를 배포
+
+```
+$ kubectl apply -f mysql-sts.yml
+service/mysql created
+
+
+### 배포 결과 확인, 퍼시스턴트 볼륨도 함께 생성됨
+$ kubectl get svc,sts,pod,sc,pvc,pv
+NAME                                                             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/glusterfs-dynamic-3c86aeb2-1584-416c-8feb-dda5b825af3b   ClusterIP   10.100.104.140   <none>        1/TCP      19s
+service/kubernetes                                               ClusterIP   10.96.0.1        <none>        443/TCP    31d
+service/mysql                                                    ClusterIP   None             <none>        3306/TCP   19s
+
+NAME                     READY   AGE
+statefulset.apps/mysql   1/1     19s
+
+NAME          READY   STATUS    RESTARTS   AGE
+pod/mysql-0   1/1     Running   0          19s
+
+NAME                                         PROVISIONER               RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANSION   AGE
+storageclass.storage.k8s.io/gluster-heketi   kubernetes.io/glusterfs   Delete          Immediate           false                  42m
+
+NAME                                STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS     AGE
+persistentvolumeclaim/pvc-mysql-0   Bound    pvc-3c86aeb2-1584-416c-8feb-dda5b825af3b   2Gi        RWO            gluster-heketi   19s
+
+NAME                                                        CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                 STORAGECLASS     REASON   AGE
+persistentvolume/pvc-3c86aeb2-1584-416c-8feb-dda5b825af3b   2Gi        RWO            Delete           Bound    default/pvc-mysql-0   gluster-heketi            16s
+
+
+### MySQL 컨테이너에 대화형 셸 기동
+$ kubectl exec -it mysql-0 -- bash
+root@mysql-0:/# mysql -u root -pqwerty
+
+
+### MySQl 클라이언트 기동
+mysql> create database hello;
+Query OK, 1 row affected (0.01 sec)
+
+
+### 데이터베이스 hello 작성
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| hello              |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.02 sec)
+```
+
+----
+
+# 5. 결과 - 스테이트풀셋 삭제 후 볼륨 확인
+
+```
+$ kubectl delete -f mysql-sts.yml
+service "mysql" deleted
+statefulset.apps "mysql" deleted
+
+
+$ kubectl get svc,sts,pod,pvc,pv
+NAME                                                             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+service/glusterfs-dynamic-3c86aeb2-1584-416c-8feb-dda5b825af3b   ClusterIP   10.100.104.140   <none>        1/TCP     9m58s
+service/kubernetes                                               ClusterIP   10.96.0.1        <none>        443/TCP   31d
+
+NAME                                STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS     AGE
+persistentvolumeclaim/pvc-mysql-0   Bound    pvc-3c86aeb2-1584-416c-8feb-dda5b825af3b   2Gi        RWO            gluster-heketi   9m58s
+
+NAME                                                        CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                 STORAGECLASS     REASON   AGE
+persistentvolume/pvc-3c86aeb2-1584-416c-8feb-dda5b825af3b   2Gi        RWO            Delete           Bound    default/pvc-mysql-0   gluster-heketi            9m55s
+
+
+$ kubectl apply -f mysql-sts.yml
+service/mysql created
+statefulset.apps/mysql created
+
+$ kubectl exec -it mysql-0 -- bash
+root@mysql-0:/# mysql -u root -pqwerty
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| hello              |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.01 sec)
+```
