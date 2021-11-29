@@ -246,10 +246,12 @@ NAME                                                        CAPACITY   ACCESS MO
 persistentvolume/pvc-3c86aeb2-1584-416c-8feb-dda5b825af3b   2Gi        RWO            Delete           Bound    default/pvc-mysql-0   gluster-heketi            9m55s
 
 
+### MySQL 서버의 재배포
 $ kubectl apply -f mysql-sts.yml
 service/mysql created
 statefulset.apps/mysql created
 
+### 데이터베이스 hello가 존재하는 것을 확인
 $ kubectl exec -it mysql-0 -- bash
 root@mysql-0:/# mysql -u root -pqwerty
 
