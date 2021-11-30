@@ -62,7 +62,7 @@ metadata:
 ```
 
 |항목|설명|
-|------|---|---|---|
+|------|---|
 |apiVersion|v1 설정|
 |kind|ServiceAccount 설정|
-|metadata|name : 서비스 어카운트의 이름 namespace : 서비스 어카운트가 배치될 네임스페이스|
+|metadata|+ name : 서비스 어카운트의 이름 <br> + namespace : 서비스 어카운트가 배치될 네임스페이스|
