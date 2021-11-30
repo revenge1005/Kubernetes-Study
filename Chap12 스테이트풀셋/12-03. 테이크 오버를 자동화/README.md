@@ -36,7 +36,7 @@ kubectl을 사용하지 않으며, 파드상의 컨테이너에서 돌아가는 
 
 ---- 
 
-# 1. RBAC 권한 부여 매니페스트 작성
+# 3. RBAC 권한 부여 매니페스트 작성
 
 + RBAC(Role-Based Access Control)은 역할 기준의 접근 제어로, k8s 클러스터 내에 역할(Role)을 설정하고 그 역할에 접근 가능한 권한을 정의하는 접근 제어 방식
 
@@ -60,9 +60,82 @@ metadata:
   namespace: tkr-system
   name: high-availability
 ```
+### (1-1) service account v1 core 표1
+
+https://kubernetes.io/docs/reference/kubernetes-api/authentication-resources/service-account-v1/
 
 |항목|설명|
 |------|---|
 |apiVersion|v1 설정|
 |kind|ServiceAccount 설정|
 |metadata|+ name : 서비스 어카운트의 이름 <br> + namespace : 서비스 어카운트가 배치될 네임스페이스|
+
+### (2) role-based-access-ctl.yml
+
+https://kubernetes.io/docs/reference/kubernetes-api/authorization-resources/cluster-role-v1/
+
+https://kubernetes.io/docs/reference/kubernetes-api/authorization-resources/cluster-role-binding-v1/
+
+```
+# 클러스터 롤
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: nodes
+rules:
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["list","delete"]
+---
+# 클러스터롤과 서비스 어카운트의 바인딩
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: nodes
+subjects:
+- kind: ServiceAccount
+  name: high-availability  # 서비스 어카운트 이름
+  namespace: tkr-system    # 네임스페이스 지정은 필수
+roleRef:
+  kind: ClusterRole
+  name: nodes
+  apiGroup: rbac.authorization.k8s.io
+```
+
+### (2-1) 클러스터 롤 표2
+|항목|설명|
+|------|---|
+|apiVersion|rbac.authorization.k8s.io/v1|
+|kind|ClusterRole 설정|
+|metadata|+ name : 클러스터 롤의 이름|
+|rules|복수의 규칙 기술 가능 (표3 참조)|
+
+### (2-2) 대상 자원과 허가 행위 규칙 표3
+|항목|설명|
+|------|---|
+|apiGroups|리소스를 포함한 APIGroup 이름의 배열 <br> [""]의 경우는 core 그룹을 가리크며, core 외의 예를 들면 deployment는 ["apps"]가 됨|
+|resources|롤을 적용하는 리소스 목록|
+|verbs|허가할 동사의 목록 설정 가능한 Resources(자원)와 Verb(동사)의 관계는 "kubectl describe clusterrole admin -n kube-system"으로 확인|
+
+### (2-3) 서비스 어카운트와 클러스터 롤의 대응 표4 
+|항목|설명|
+|------|---|
+|apiVersion|rbac.authorization.k8s.io/v1|
+|kind|ClusterRoleBinding 설정|
+|metadata|+ name : 클러스터 롤 바인딩의 이름|
+|subjects|서비스 어카운트의 이름과 소속된 네임스페이스를 기재 (표9)|
+|roleRef|subject에서 지정한 서비스 어카운트가 참조할 클러스터 롤을 설정 (표10)|
+
+### (2-4) 연결 대상의 서비스 어카운트 등의 지정 표5
+|항목|설명|
+|------|---|
+|kind|ServiceAccount 설정|
+|name|서비스 어카운트 이름|
+|namespace|서비스 어카운트가 속하는 네임스페이스 설정|
+
+### (2-5) 연결 롤 표6
+|항목|설명|
+|------|---|
+|kind|ClusterRole 설정|
+|name|참조하는 롤의 이름|
+|apiGroup|rbac.authorization.k8s.io 설정|
