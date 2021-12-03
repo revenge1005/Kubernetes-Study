@@ -2,8 +2,6 @@
 
 > # 1. 인그레스 (ingress)
 
-![인그레스](https://user-images.githubusercontent.com/42735894/144570087-86f4557c-93e9-4eb5-ae58-67b0dcae763f.png)
-
 + k8s 클러스터 외부에서의 요청을 k8s 클러스터 내부의 애플리케이션에 연결하기 위한 API 오브젝트
 
 + 디플로이먼트 관리하의 애플리케이션을 외부 공개용 URL과 매칭하여 인터넷에 공개하는데 사용
@@ -11,6 +9,8 @@
 + 인그레스 컨트롤러는 다른 컨트롤러와 달리 마스터상의 Kube-controller-manager의 일부로 실행되지 않는다.
 
 + 다양한 인그레스 컨트롤러가 있는데, 그중에서도 Nginx 인그레스 컨트롤러가 대표적이다.
+
+![인그레스](https://user-images.githubusercontent.com/42735894/144570087-86f4557c-93e9-4eb5-ae58-67b0dcae763f.png)
 
 ----
 
