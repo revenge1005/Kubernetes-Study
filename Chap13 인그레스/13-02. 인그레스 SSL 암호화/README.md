@@ -124,3 +124,6 @@ ingress-nginx-controller             NodePort    10.100.151.240   <none>        
 ingress-nginx-controller-admission   ClusterIP   10.109.248.125   <none>        443/TCP                      77m
 ```
 
+![11](https://user-images.githubusercontent.com/42735894/144746009-f1222823-4ae8-49f6-a9ac-9311dc66992d.PNG)
+
+![22](https://user-images.githubusercontent.com/42735894/144746013-396fc951-de01-4be6-9176-a6a706ceeaee.PNG)
