@@ -103,21 +103,27 @@ spec:                                                   ## 표2
       - path: /                                         ## 표5
         pathType: Prefix
         backend:                                        ## 표6
-          serviceName: helloworld-svc
-          servicePort: 8080
-      - path: /apl2                                      # URL 패스 2      
+          service:
+            name: helloworld-svc
+            port:
+              number: 8080
+      - path: /pay                                  # URL 패스 2
         pathType: Prefix
         backend:                                         # 대응하는 서비스명과 포트 번호
-          serviceName: nginx-svc
-          servicePort: 9080
+          service:
+            name: nginx-svc
+            port:
+              number: 9080
   - host: xyz.sample.com                                 # 도메인 2
     http:
       paths:
       - path: /                                          # 도메인 2의 패스
         pathType: Prefix
         backend:
-          serviceName: java-svc                          # 도메인 2 패스에 대응하는 서비스
-          servicePort: 9080
+          service:
+            name: java-svc                          # 도메인 2 패스에 대응하는 서비스
+            port:
+              number: 9080
 ```
 
 ### (1) 표1 인그레스 API 
@@ -161,8 +167,8 @@ spec:                                                   ## 표2
 
 |항목|설명|
 |------|---|
-|serviceName|서비스 이름|
-|servicePort|서비스 포트번호|
+|service.name|서비스 이름|
+|service.port.number|서비스 포트번호|
 
 ### (7) 표7 전송될 서비스의 이름과 포트번호
 
