@@ -50,7 +50,7 @@ spec:
           servicePort: 9080
 ```
 
-### (2) 테스트 환경 구성
+### (1) 테스트 환경 구성
 
 ```
 $ kubectl get all,ingress
