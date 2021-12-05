@@ -84,4 +84,8 @@ Events:
 ```
 192.168.219.11  abc.sample.com xyz.sample.com
 ```
+![1](https://user-images.githubusercontent.com/42735894/144744511-470f113a-3906-4815-a597-8cb09abb3027.PNG)
 
+![2](https://user-images.githubusercontent.com/42735894/144744512-6945a699-280a-4c10-9127-21e4f297cc22.PNG)
+
+![3](https://user-images.githubusercontent.com/42735894/144744513-7b258922-7bc0-4936-8b1e-28e0d1625c42.PNG)
