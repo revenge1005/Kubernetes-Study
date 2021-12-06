@@ -6,10 +6,10 @@
 + 퍼블릭 클라우드 환경에서는 인그레스와 VIP를 연결하는 기능이 있어 그대로 사용하면 되지만, 온프레미스 환경에서는 인그레스에 VIP를 설정하기 위한 작업이 필요하다.
 
 
+![123](https://user-images.githubusercontent.com/42735894/144849076-bbfb71df-3179-46eb-a0d3-d6d3f4bb10d7.PNG)
 
 
-
-+ kube-keepalived-vip 파드는 VRRP(Virtaul Router Redundancy Protocol)에 따라 멤버의 존재를 확인하고 멤버 중 한 노드에게 VIP를 부여한다.
++ kube-keepalived-vip 파드는 VRRP(Virtaul Router Redundancy Protocol)에 따라 멤버의 존재를 확인하고 멤버 중 한 노드에게 VIP를 부여함
 
 + 이 VIP를 받은 노드가 요청을 받아서 인그레스 컨트롤러에 전달한다.
 
