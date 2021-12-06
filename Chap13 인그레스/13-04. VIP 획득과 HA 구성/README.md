@@ -20,3 +20,6 @@
 ----
 > # 2. 클라이언트 요청이 VIP를 통해 파드에 전달되는 과정
 
+![1234](https://user-images.githubusercontent.com/42735894/144851156-ff28fafe-39e3-4336-a58f-e9cf7b67fec2.PNG)
+
+
