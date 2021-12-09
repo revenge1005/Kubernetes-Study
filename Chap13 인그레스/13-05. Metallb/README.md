@@ -26,9 +26,9 @@
 
 ### (3) MetalLB
 
-+ MetalLB Controller : 작동 방식 (프로토콜)을 정의하고, External-IP 부여하여 관리한다.
++ **MetalLB Controller : 작동 방식 (프로토콜)을 정의하고, External-IP 부여하여 관리한다.**
 
-+ MetalLB speaker : 정해진 프로토콜 (L2/ARP, L3/BGP)에 따라 경로를 만들 수 있게 네트워크 정보를 광고하고 수집해 각 파드의 경로를 제공
++ **MetalLB speaker : 정해진 프로토콜 (L2/ARP, L3/BGP)에 따라 경로를 만들 수 있게 네트워크 정보를 광고하고 수집해 각 파드의 경로를 제공**
 
 ![metallb](https://user-images.githubusercontent.com/42735894/145426946-9f727058-13b4-4cbf-b714-7e6cd83c91a0.PNG)
 
