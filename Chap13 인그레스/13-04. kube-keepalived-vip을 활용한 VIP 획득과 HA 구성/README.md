@@ -1,7 +1,7 @@
 ----
 > # 1. VIP 획득과 HA 구성
 
-+ 책보고 해본 예제인데 책에 설명이 별로 없다 좀 더 자세하게 알고 싶다면 -> https://github.com/aledbf/kube-keepalived-vip
++ 책보고 해본 예제인데 책에 자세한 설명이 없다 좀 더 자세하게 알고 싶다면 -> https://github.com/aledbf/kube-keepalived-vip
 
 + NGINX 인그레스 컨트롤러는 Virtual IP(VIP)를 노드 간 공유하는 기능을 가지고 있지 않는다.
 
