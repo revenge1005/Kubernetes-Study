@@ -40,13 +40,6 @@ https://kubernetes.github.io/ingress-nginx/deploy/#bare-metal-clusters
 $ wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.0/deploy/static/provider/baremetal/deploy.yaml
 
 
-$ tree ingress-keepalived/
-ingress-keepalived
-├── deploy.yaml
-├── vip-configmap.yml
-├── vip-daemonset.yml
-└── vip-rbac.yml
-
 $ vim deployment
 
 <중략>
@@ -259,3 +252,18 @@ spec:
 ----
 
 > # 4. 결과 확인
+
+```
+$ tree ingress-keepalived/
+ingress-keepalived
+├── deploy.yaml
+├── vip-configmap.yml
+├── vip-daemonset.yml
+└── vip-rbac.yml
+
+
+$ kubectl apply -f ingress-keepalived/
+
+
+$ 
+```

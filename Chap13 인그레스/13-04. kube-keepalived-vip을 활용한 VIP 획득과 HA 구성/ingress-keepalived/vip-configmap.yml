@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vip-configmap
+  namespace: ingress-nginx
+data:
+  192.168.219.99: ingress-nginx/ingress-nginx-controller
