@@ -321,3 +321,4 @@ $ curl abc.sample.com
 <html><head><title>HTTP Hello World</title></head><body><h1>Hello from hello-world-deployment-6c54b87b6f-8mg5x</h1></body></html
 ```
 
+![결과](https://user-images.githubusercontent.com/42735894/145384496-5c530534-240b-4d48-a5b1-686403873a91.PNG)
