@@ -175,3 +175,11 @@ $ vim /etc/hosts
 $ curl http://abc.sample.com
 <html><head><title>HTTP Hello World</title></head><body><h1>Hello from hello-world-deployment-6c54b87b6f-9g4xm</h1></body></html
 ```
+
+<br>
+
+----
+
+> # 참고
+
++ https://www.youtube.com/watch?v=hJO1nxsB5uY
