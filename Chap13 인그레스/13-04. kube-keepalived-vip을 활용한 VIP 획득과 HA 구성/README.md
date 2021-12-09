@@ -113,7 +113,7 @@ metadata:
             - --validating-webhook-key=/usr/local/certificates/key
             - --publish-service=$(POD_NAMESPACE)/ingress-nginx-controller       ## "해당 부분 추가"
             ## 윗 부분 내용은 인그레스 컨트롤러의 서비스(ingress-nginx-controller) 타입 LoadBalancer의 External IP 주소를 설정한다.
-            ## 해당 환겨엥서 타입 LoadBalancer의 서비스는 k8s 클러스터 외부의 로드밸런서와 연동하지 않는다.
+            ## 해당 환겨에서 타입 LoadBalancer의 서비스는 k8s 클러스터 외부의 로드밸런서와 연동하지 않는다.
             ## 대신에 외부용 IP (External IP)로 온 요청을 Nginx 인그레스 컨트롤러에 전달한다.
           securityContext:
             capabilities:
@@ -251,7 +251,7 @@ spec:
 
 ----
 
-> # 4. 결과 확인
+> # 4. 결과 확인 - 애플리케이션 배포와 테스트
 
 ```
 $ tree ingress-keepalived/
@@ -265,5 +265,59 @@ ingress-keepalived
 $ kubectl apply -f ingress-keepalived/
 
 
-$ 
+$ kubectl get all -n ingress-nginx
+NAME                                            READY   STATUS      RESTARTS      AGE
+pod/ingress-nginx-admission-create--1-97rxm     0/1     Completed   0             59s
+pod/ingress-nginx-admission-patch--1-cwglk      0/1     Completed   1             59s
+pod/ingress-nginx-controller-5db48bdc5d-n65jz   1/1     Running     0             59s
+pod/kube-keepalived-vip-n692z                   1/1     Running     2 (41s ago)   59s
+pod/kube-keepalived-vip-nh272                   1/1     Running     2 (39s ago)   59s
+
+NAME                                         TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)                      AGE
+service/ingress-nginx-controller             LoadBalancer   10.107.202.33   192.168.219.99   80:32011/TCP,443:30677/TCP   59s
+service/ingress-nginx-controller-admission   ClusterIP      10.111.5.104    <none>           443/TCP                      59s
+
+NAME                                 DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+daemonset.apps/kube-keepalived-vip   2         2         2       2            2           <none>          59s
+
+NAME                                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/ingress-nginx-controller   1/1     1            1           59s
+
+NAME                                                  DESIRED   CURRENT   READY   AGE
+replicaset.apps/ingress-nginx-controller-5db48bdc5d   1         1         1       59s
+
+NAME                                       COMPLETIONS   DURATION   AGE
+job.batch/ingress-nginx-admission-create   1/1           4s         59s
+job.batch/ingress-nginx-admission-patch    1/1           4s         59s
+
+
+$ kubectl apply -f test-apl/
+
+
+$ kubectl get all
+NAME                                          READY   STATUS    RESTARTS   AGE
+pod/hello-world-deployment-6c54b87b6f-822hj   1/1     Running   0          29s
+pod/hello-world-deployment-6c54b87b6f-8mg5x   1/1     Running   0          29s
+pod/hello-world-deployment-6c54b87b6f-fxvx8   1/1     Running   0          29s
+pod/hello-world-deployment-6c54b87b6f-jdv69   1/1     Running   0          29s
+pod/hello-world-deployment-6c54b87b6f-ptzv9   1/1     Running   0          29s
+
+NAME                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+service/hello-world-svc   NodePort    10.106.192.231   <none>        8080:31445/TCP   29s
+service/kubernetes        ClusterIP   10.96.0.1        <none>        443/TCP          41d
+
+NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/hello-world-deployment   5/5     5            5           29s
+
+NAME                                                DESIRED   CURRENT   READY   AGE
+replicaset.apps/hello-world-deployment-6c54b87b6f   5         5         5       29s
+
+
+## /etc/hosts 파일에 아래 내용 추가 
+192.168.219.99 abc.sample.com
+
+
+$ curl abc.sample.com
+<html><head><title>HTTP Hello World</title></head><body><h1>Hello from hello-world-deployment-6c54b87b6f-8mg5x</h1></body></html
 ```
+
