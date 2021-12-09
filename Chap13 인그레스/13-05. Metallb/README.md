@@ -59,7 +59,7 @@ kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.11.0/manif
 
 ### (3) ConfigMap (Layer 2 Configuration)
 
-https://metallb.universe.tf/configuration/
++ https://metallb.universe.tf/configuration/
 
 + Metallb에서 사용할 외부 IP나 운영 모드 등을 설정
 
