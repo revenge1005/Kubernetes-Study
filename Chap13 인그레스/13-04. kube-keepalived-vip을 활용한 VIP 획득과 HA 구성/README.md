@@ -322,3 +322,39 @@ $ curl abc.sample.com
 ```
 
 ![결과](https://user-images.githubusercontent.com/42735894/145384496-5c530534-240b-4d48-a5b1-686403873a91.PNG)
+
+<br>
+
+----
+
+> # 5. 결과 확인 - 장애 회복 테스트
+
++ vip를 획득한 노드를 정지시키면 kube-keepalived-vip에 의해 VIP가 다른 노드로 옮겨 간다.
+
++ 그때 접근을 회복하기까지의 시간을 측장한다.
+
+```
+while true; do curl --connect-timeout 3 http://abc.sample.com; sleep 10; done
+<html><head><title>HTTP Hello World</title></head><body><h1>Hello from hello-world-deployment-6c54b87b6f-q844g</h1></body></html
+<html><head><title>HTTP Hello World</title></head><body><h1>Hello from hello-world-deployment-6c54b87b6f-9kqgk</h1></body></html
+<html><head><title>HTTP Hello World</title></head><body><h1>Hello from hello-world-deployment-6c54b87b6f-9g4xm</h1></body></html
+## 이쯤에서 vip가 할당된 노드를 정지
+<html><head><title>HTTP Hello World</title></head><body><h1>Hello from hello-world-deployment-6c54b87b6f-dkg2j</h1></body></html
+curl: (28) Connection timed out after 3001 milliseconds
+curl: (28) Connection timed out after 3002 milliseconds
+curl: (28) Connection timed out after 3003 milliseconds
+curl: (28) Connection timed out after 3004 milliseconds
+curl: (28) Connection timed out after 3000 milliseconds
+curl: (28) Connection timed out after 3000 milliseconds
+curl: (28) Connection timed out after 3000 milliseconds
+curl: (28) Connection timed out after 3000 milliseconds
+curl: (28) Connection timed out after 3001 milliseconds
+curl: (28) Connection timed out after 3002 milliseconds
+curl: (28) Connection timed out after 3003 milliseconds
+curl: (28) Connection timed out after 3004 milliseconds
+<html><head><title>HTTP Hello World</title></head><body><h1>Hello from hello-world-deployment-6c54b87b6f-q844g</h1></body></html
+<html><head><title>HTTP Hello World</title></head><body><h1>Hello from hello-world-deployment-6c54b87b6f-9g4xm</h1></body></html
+<html><head><title>HTTP Hello World</title></head><body><h1>Hello from hello-world-deployment-6c54b87b6f-q844g</h1></body></html
+<html><head><title>HTTP Hello World</title></head><body><h1>Hello from hello-world-deployment-6c54b87b6f-9g4xm</h1></body></html
+<html><head><title>HTTP Hello World</title></head><body><h1>Hello from hello-world-deployment-6c54b87b6f-9g4xm</h1></body></html
+```
