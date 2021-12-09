@@ -76,7 +76,7 @@ data:
     - name: default
       protocol: layer2
       addresses:
-      - 192.168.219.240-192.168.219.250
+      - 192.168.219.240-192.168.219.250    ### MetalLB에서 사용할 외부 IP 주소 대역을 할당
 EOF
 ```
 ```
