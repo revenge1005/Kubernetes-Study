@@ -226,10 +226,5 @@ Non-terminated Pods:          (6 in total)
   default                     web-php-7b7566bd54-fx8w1    200m (20%)    0 (0%)      0 (0%)           0 (0%)         20m
   kube-system                 coredns-78fcd69978-zwpdf    0 (0%)     0 (0%)      70Mi (3%)        170Mi (9%)     42d
   kube-system                 kube-proxy-b6fxq            0 (0%)        0 (0%)      0 (0%)           0 (0%)         42d
-Allocated resources:
-  (Total limits may be over 100 percent, i.e., overcommitted.)
-  Resource           Requests     Limits
-  --------           --------     ------
-  cpu                800m (40%)   0 (0%)
 
 ```
