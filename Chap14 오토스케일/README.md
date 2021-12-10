@@ -149,3 +149,87 @@ NAME                       CPU(cores)   MEMORY(bytes)
 web-php-7b7566bd54-xvlgg   1m           18Mi
 ```
 
+<br>
+
+----
+
+> # 4. 컨테이너별 설정하는 CPU 요구 시간
+
++ 아래 내용은 요청 개시 후 1분간 파드의 CPU 사용 시간(밀리초)을 보여준다.
+
+```
+$ kubectl top pod
+NAME                       CPU(cores)   MEMORY(bytes)
+web-php-7b7566bd54-xvlgg   218m           22Mi
+```
+
++ CPU 사용률을 구할 때는 파드의 실 CPU 사용 시간을 배포 시 CPU 요구 시간으로 나눈다.
+
++ 아래에서 "cpu: 200m'은 파드의 CPU 요구시간(밀리초)을 설정하고 있는 부분이다.
+
+```
+spec:
+    containers:
+    - image: maho/web-php:0.2
+      name: web-php
+      resources:
+        requests:
+          cpu: 200m
+```
++ 처음에는 파드가 한 개 이므로,
+
+    + 파드 CPU 사용률 : 실 사용 시간 218밀리초 / 요구 시간 200밀리초 = 109%
+
+    + 파드 필요 개수 : CPU 사용률 109% / 목표 CPU 사용률 50% = 2.18
+
+    + 소수점을 올리면 2.18 -> 레플리카 수 = 3
+
++ 매니페스트를 보면 파드 템플릿의 스펙에 CPU 요구 시간이 200밀리초로 되어 있는데, 이것은 초당 CPU 요구 시간이다.
+
++ 즉, 'CPU 요구 시간 200밀리초 / 1,000밀리초'이기 때문에 CPU 사용률은 20%가 된다.
+
++ HPA의 목표 사용률이 50% 이므로, 각 파드의 CPU 사용 시간이 100밀리초가 되도록 파드의 개수가 조절된다.
+
+<br>
+
+----
+
+> # 5. 노드상의 파드별 리소스 요구 상태
+
++ CPU 요구 시간에 따라 각 노드에 배치 가능한 파드 수가 결정된다.
+
++ 예를 들어, vcpu가 하나인 노드에서는 CPU 요구 시간이 200m(밀리초)인 파드를 5개까지 배포할 수 있다.
+
++ 아래 내용은 node02에 web-php의 파드 4개가 배포되어 총 800m(80%)의 CPU 요구 시간을 할당된 것을 알 수 있다.
+
++ 따라서 디플로이면트의 레플리카를 크게 설정한다 해도, 수용할 수 있는 CPU 요구 시간이나 메모리 요구량을 넘어서서 파드를 기동할 수 없다.
+
+```
+$ kubectl describe nodes k8s-node02
+
+<중략>
+
+Addresses:
+  InternalIP:  192.168.219.12
+  Hostname:    k8s-node02
+Capacity:
+  cpu:                1                 # vcpu 수
+
+<중략>
+
+Non-terminated Pods:          (6 in total)
+  Namespace                   Name                        CPU Requests  CPU Limits  Memory Requests  Memory Limits  Age
+  ---------                   ----                        ------------  ----------  ---------------  -------------  ---
+  default                     web-php-7b7566bd54-chh92    200m (20%)    0 (0%)      0 (0%)           0 (0%)         37s
+  default                     web-php-7b7566bd54-f5cbg    200m (20%)    0 (0%)      0 (0%)           0 (0%)         37s
+  default                     web-php-7b7566bd54-xvlgg    200m (20%)    0 (0%)      0 (0%)           0 (0%)         20m
+  default                     web-php-7b7566bd54-fx8w1    200m (20%)    0 (0%)      0 (0%)           0 (0%)         20m
+  kube-system                 coredns-78fcd69978-zwpdf    0 (0%)     0 (0%)      70Mi (3%)        170Mi (9%)     42d
+  kube-system                 kube-proxy-b6fxq            0 (0%)        0 (0%)      0 (0%)           0 (0%)         42d
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests     Limits
+  --------           --------     ------
+  cpu                800m (40%)   0 (0%)
+
+```
