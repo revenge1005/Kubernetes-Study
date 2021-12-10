@@ -38,8 +38,6 @@
 
 + 즉, 종료 요청 시그널 SIGTERM을 받으면 종료 처리를 수행하고 컨테이너를 종료하도록 구현해야 한다.
 
-----
-
 + HPA는 대상이 되는 파드의 CPU 사용률을 정기적으로 수집하고 CPU 사용률의 평균을 목표값이 되도록 레플리카 수를 조절한다.
 
 + 이때 조절 범위는 **"MinReplicas <= Replicas <= MaxReplicas"** 가 된다.
@@ -48,7 +46,7 @@
 
 ----
 
-## (1) (metrics server)
+## (1) metrics server
 
 + 메트릭 서버는 클러스터 전역에서 리소스 사용량 데이터를 집계한다.
 
@@ -58,9 +56,7 @@
 
     - <참고> : https://kubernetes.io/ko/docs/tasks/debug-application-cluster/resource-metrics-pipeline/
 
-----
-
-## (2)【 설치 방법 】
+## (2) 설치 방법
 
 + 설치 : https://github.com/kubernetes-sigs/metrics-server/releases
 
@@ -119,7 +115,6 @@ metadata:
         beta.kubernetes.io/os:
       hostNetwork: true                 ### 추가 (3)
 ```
-----
 
 ## (3) 실행
 
