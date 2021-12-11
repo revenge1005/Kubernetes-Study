@@ -39,9 +39,9 @@
 
 ----
 
-## (2) k8s 클러스터 컨텍스트 변경과 kubectl을 통한 multi-cluster 접속
+## (2) k8s 클러스터 컨텍스트 변경
 
-+ 첫 번째 클러스터 .kube/config 파일 변경
++ **첫 번째 클러스터 .kube/config 파일 변경**
 
 ```
 $ kubectl config get-contexts
@@ -74,3 +74,16 @@ users:
     client-certificate-data: REDACTED 
     client-key-data: REDACTED
 ```
+```
+$ systemctl daemon-reload
+
+$ systemctl restart kubelet
+
+$ kubectl config get-contexts
+CURRENT   NAME                                CLUSTER         AUTHINFO              NAMESPACE
+*         k8s-cluster01-admin@k8s-cluster01   k8s-cluster01   k8s-cluster01-admin
+```
+
+----
+
+## (3) kubectl을 통한 multi-cluster 접속
