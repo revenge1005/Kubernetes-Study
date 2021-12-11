@@ -154,7 +154,7 @@ CURRENT   NAME                                CLUSTER         AUTHINFO          
           k8s-cluster02-admin@k8s-cluster02   k8s-cluster02   k8s-cluster02-admin
 ```
 
-+ **k8s-cluster02에 webserver deployment 생성**
++ **미리 k8s-cluster02에 webserver deployment 생성**
 
 ```bash
 root@k8s-master2:~# kubectl create deployment --image=nginx webserver
