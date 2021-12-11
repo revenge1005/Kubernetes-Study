@@ -113,7 +113,7 @@ clusters:
   name: k8s-cluster01                                 
 - cluster:                       ## 추가 (1)
     certificate-authority-data: REDACTED
-    server: https://192.168.219.10:6443
+    server: https://192.168.219.150:6443
   name: k8s-cluster02                                 
 contexts:
 - context:
