@@ -35,7 +35,7 @@
 
 ## (1) 실습 환경
 
-
+![01](https://user-images.githubusercontent.com/42735894/145680011-3b6d9cd3-7c22-4f07-9246-375b1d0b98c9.PNG)
 
 ----
 
