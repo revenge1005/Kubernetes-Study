@@ -85,7 +85,7 @@ CURRENT   NAME                                CLUSTER         AUTHINFO          
 *         k8s-cluster01-admin@k8s-cluster01   k8s-cluster01   k8s-cluster01-admin
 ```
 
-+ 마찬가지로 두 번째 클러스터도 변경하면 아래와 같다.
++ **마찬가지로 두 번째 클러스터도 변경하면 아래와 같다.**
 
 ```
 $ kubectl config get-contexts
@@ -95,3 +95,48 @@ CURRENT   NAME                                CLUSTER         AUTHINFO          
 ----
 
 ## (3) kubectl을 통한 multi-cluster 접속
+
++ 각 클러스터마다 config를 수정하여 이름 부분이 변경되었다면, 양쪽 클러스터에 모두 접속할 수 있는 kubectl 클러스터 계정의 config 파일에 또 다른 클러스터의 config 내용을 병합하여 아래와 같이 변경해둔다.
+
+```
+root@k8s-master:~# cp .kube/config .kube/config.old
+
+root@k8s-master:~# vim .kube/config
+```
+
+```yaml
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: REDACTED
+    server: https://192.168.219.10:6443
+  name: k8s-cluster01                                 
+- cluster:                                           ## 추가 (1)
+    certificate-authority-data: REDACTED
+    server: https://192.168.219.10:6443
+  name: k8s-cluster02                                 
+contexts:
+- context:
+    cluster: k8s-cluster01                            
+    user: k8s-cluster01-admin                         
+  name: kk8s-cluster01-admin@k8s-cluster01            
+- context:                                           ## 추가 (2)
+    cluster: k8s-cluster02                            
+    user: k8s-cluster02-admin                         
+  name: kk8s-cluster02-admin@k8s-cluster02            
+current-context: k8s-cluster01-admin@k8s-cluster01
+kind: Config
+preferences: {}
+users:
+- name: help
+  user:
+    as-user-extra: {}
+- name: k8s-cluster01-admin                           
+  user:
+    client-certificate-data: REDACTED 
+    client-key-data: REDACTED
+- name: k8s-cluster02-admin                           
+  user:
+    client-certificate-data: REDACTED 
+    client-key-data: REDACTED
+```
