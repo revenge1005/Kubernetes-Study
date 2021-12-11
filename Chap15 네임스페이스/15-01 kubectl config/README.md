@@ -1,6 +1,6 @@
 ----
 
-> # 15-01 kubectl 커맨드의 네임스페이스 설정
+> # 15-01 kubectl config
 
 + kubectl을 사용할 때 네임스페이스를 지정하려면 "-n <네임스페이스명>"을 사용한다.
 
@@ -43,7 +43,7 @@
 
 + **첫 번째 클러스터 .kube/config 파일 변경**
 
-```
+```bash
 $ kubectl config get-contexts
 CURRENT   NAME                          CLUSTER      AUTHINFO        NAMESPACE
 *         kubernetes-admin@kubernetes   kubernetes   kubernetes-admin
@@ -74,7 +74,7 @@ users:
     client-certificate-data: REDACTED 
     client-key-data: REDACTED
 ```
-```
+```bash
 $ systemctl daemon-reload
 
 $ systemctl restart kubelet
@@ -87,7 +87,7 @@ CURRENT   NAME                                CLUSTER         AUTHINFO          
 
 + **마찬가지로 두 번째 클러스터도 변경하면 아래와 같다.**
 
-```
+```bash
 $ kubectl config get-contexts
 CURRENT   NAME                                CLUSTER         AUTHINFO              NAMESPACE
 *         k8s-cluster02-admin@k8s-cluster02   k8s-cluster02   k8s-cluster02-admin
@@ -98,7 +98,7 @@ CURRENT   NAME                                CLUSTER         AUTHINFO          
 
 + 각 클러스터마다 config를 수정하여 이름 부분이 변경되었다면, 양쪽 클러스터에 모두 접속할 수 있는 kubectl 클러스터 계정의 config 파일에 또 다른 클러스터의 config 내용을 병합하여 아래와 같이 변경해둔다.
 
-```
+```bash
 root@k8s-master:~# cp .kube/config .kube/config.old
 
 root@k8s-master:~# vim .kube/config
@@ -141,7 +141,9 @@ users:
     client-key-data: REDACTED
 ```
 
-```
++ 이제 다음과 같이 두 개의 클러스터를 전환하면서 kubectl 명령을 사용할 수 있게 된다.
+
+```bash
 root@k8s-master:~# systemctl daemon-reload
 
 root@k8s-master:~# systemctl restart kubelet.service
@@ -151,4 +153,56 @@ CURRENT   NAME                                CLUSTER         AUTHINFO          
 *         k8s-cluster01-admin@k8s-cluster01   k8s-cluster01   k8s-cluster01-admin
           k8s-cluster02-admin@k8s-cluster02   k8s-cluster02   k8s-cluster02-admin
 
+```
+
++ k8s-cluster02에 webserver deployment 생성
+
+```bash
+root@k8s-master2:~# kubectl create deployment --image=nginx webserver
+deployment.apps/webserver created
+root@k8s-master2:~# kubectl get all
+NAME                             READY   STATUS              RESTARTS   AGE
+pod/webserver-7c4f9bf7bf-hgr8f   0/1     ContainerCreating   0          10s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   102m
+
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/webserver   0/1     1            0           10s
+
+NAME                                   DESIRED   CURRENT   READY   AGE
+replicaset.apps/webserver-7c4f9bf7bf   1         1         0       10s
+```
+
++ k8s-cluster01에서 k8s-cluster02으로 전환하여 확인해 보자.
+
+```bash
+root@k8s-master:~# kubectl config get-contexts
+CURRENT   NAME                                CLUSTER         AUTHINFO              NAMESPACE
+*         k8s-cluster01-admin@k8s-cluster01   k8s-cluster01   k8s-cluster01-admin
+          k8s-cluster02-admin@k8s-cluster02   k8s-cluster02   k8s-cluster02-admin
+
+
+root@k8s-master:~# kubectl get all
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   44d
+
+
+## cluster02로 전환
+root@k8s-master:~# kubectl config use-context k8s-cluster02-admin@k8s-cluster02
+Switched to context "k8s-cluster02-admin@k8s-cluster02".
+
+
+root@k8s-master:~# kubectl get all
+NAME                             READY   STATUS    RESTARTS   AGE
+pod/webserver-7c4f9bf7bf-hgr8f   1/1     Running   0          3m59s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   106m
+
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/webserver   1/1     1            1           3m59s
+
+NAME                                   DESIRED   CURRENT   READY   AGE
+replicaset.apps/webserver-7c4f9bf7bf   1         1         1       3m59s
 ```
