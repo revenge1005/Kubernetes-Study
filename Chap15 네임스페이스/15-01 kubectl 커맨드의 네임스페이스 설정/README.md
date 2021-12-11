@@ -79,11 +79,19 @@ $ systemctl daemon-reload
 
 $ systemctl restart kubelet
 
+## 변경된 것을 확인
 $ kubectl config get-contexts
 CURRENT   NAME                                CLUSTER         AUTHINFO              NAMESPACE
 *         k8s-cluster01-admin@k8s-cluster01   k8s-cluster01   k8s-cluster01-admin
 ```
 
++ 마찬가지로 두 번째 클러스터도 변경하면 아래와 같다.
+
+```
+$ kubectl config get-contexts
+CURRENT   NAME                                CLUSTER         AUTHINFO              NAMESPACE
+*         k8s-cluster02-admin@k8s-cluster02   k8s-cluster02   k8s-cluster02-admin
+```
 ----
 
 ## (3) kubectl을 통한 multi-cluster 접속
