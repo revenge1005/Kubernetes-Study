@@ -25,4 +25,20 @@
 
 + kubectl config는 마스터에 대한 접근 정보를 기반으로 하며, kubectl이 마스터에 대한 정보를 얻는 방법은 다음과 같다.
 
-    - 실행 시 옵션으로 지정 '-kubeconfig <config_파일_경로>
+    - ① 실행 시 옵션으로 지정 '-kubeconfig <config_파일_경로>'
+
+    - ② 홈 디렉토리 밑의 '.kube/config' 참조
+
+    - ③ 환경 변수 KUBECONFIG에 지정된 경로 참조
+
+----
+
+## (1) 실습 환경
+
+
+
+----
+
+## (2) k8s 클러스터 컨텍스트 변경과 kubectl을 통한 multi-cluster 접속
+
+
