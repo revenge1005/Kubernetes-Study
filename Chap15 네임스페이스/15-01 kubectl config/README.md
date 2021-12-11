@@ -192,6 +192,12 @@ root@k8s-master:~# kubectl config use-context k8s-cluster02-admin@k8s-cluster02
 Switched to context "k8s-cluster02-admin@k8s-cluster02".
 
 
+root@k8s-master:~# kubectl config get-contexts
+CURRENT   NAME                                CLUSTER         AUTHINFO              NAMESPACE
+          k8s-cluster01-admin@k8s-cluster01   k8s-cluster01   k8s-cluster01-admin
+*         k8s-cluster02-admin@k8s-cluster02   k8s-cluster02   k8s-cluster02-admin
+
+
 root@k8s-master:~# kubectl get all
 NAME                             READY   STATUS    RESTARTS   AGE
 pod/webserver-7c4f9bf7bf-hgr8f   1/1     Running   0          3m59s
