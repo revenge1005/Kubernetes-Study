@@ -111,7 +111,7 @@ clusters:
     certificate-authority-data: REDACTED
     server: https://192.168.219.10:6443
   name: k8s-cluster01                                 
-- cluster:                                           ## 추가 (1)
+- cluster:                       ## 추가 (1)
     certificate-authority-data: REDACTED
     server: https://192.168.219.10:6443
   name: k8s-cluster02                                 
@@ -120,7 +120,7 @@ contexts:
     cluster: k8s-cluster01                            
     user: k8s-cluster01-admin                         
   name: kk8s-cluster01-admin@k8s-cluster01            
-- context:                                           ## 추가 (2)
+- context:                       ## 추가 (2)
     cluster: k8s-cluster02                            
     user: k8s-cluster02-admin                         
   name: kk8s-cluster02-admin@k8s-cluster02            
@@ -135,8 +135,20 @@ users:
   user:
     client-certificate-data: REDACTED 
     client-key-data: REDACTED
-- name: k8s-cluster02-admin                           
+- name: k8s-cluster02-admin       ## 추가 (3)                  
   user:
     client-certificate-data: REDACTED 
     client-key-data: REDACTED
+```
+
+```
+root@k8s-master:~# systemctl daemon-reload
+
+root@k8s-master:~# systemctl restart kubelet.service
+
+root@k8s-master:~# kubectl config get-contexts
+CURRENT   NAME                                CLUSTER         AUTHINFO              NAMESPACE
+*         k8s-cluster01-admin@k8s-cluster01   k8s-cluster01   k8s-cluster01-admin
+          k8s-cluster02-admin@k8s-cluster02   k8s-cluster02   k8s-cluster02-admin
+
 ```
