@@ -1,6 +1,6 @@
 ----
 
-> # 15-01 kubectl config
+> # 1. kubectl config
 
 + kubectl을 사용할 때 네임스페이스를 지정하려면 "-n <네임스페이스명>"을 사용한다.
 
@@ -21,7 +21,7 @@
 
 ----
 
-> # 15-02 조작할 k8s 클러스터와 네임스페이스를 교체
+> # 2. 조작할 k8s 클러스터와 네임스페이스를 교체
 
 + kubectl config는 마스터에 대한 접근 정보를 기반으로 하며, kubectl이 마스터에 대한 정보를 얻는 방법은 다음과 같다.
 
@@ -141,7 +141,7 @@ users:
     client-key-data: REDACTED
 ```
 
-+ 이제 다음과 같이 두 개의 클러스터를 전환하면서 kubectl 명령을 사용할 수 있게 된다.
++ **이제 다음과 같이 두 개의 클러스터를 전환하면서 kubectl 명령을 사용할 수 있게 된다.**
 
 ```bash
 root@k8s-master:~# systemctl daemon-reload
@@ -152,10 +152,9 @@ root@k8s-master:~# kubectl config get-contexts
 CURRENT   NAME                                CLUSTER         AUTHINFO              NAMESPACE
 *         k8s-cluster01-admin@k8s-cluster01   k8s-cluster01   k8s-cluster01-admin
           k8s-cluster02-admin@k8s-cluster02   k8s-cluster02   k8s-cluster02-admin
-
 ```
 
-+ k8s-cluster02에 webserver deployment 생성
++ **k8s-cluster02에 webserver deployment 생성**
 
 ```bash
 root@k8s-master2:~# kubectl create deployment --image=nginx webserver
@@ -174,7 +173,7 @@ NAME                                   DESIRED   CURRENT   READY   AGE
 replicaset.apps/webserver-7c4f9bf7bf   1         1         0       10s
 ```
 
-+ k8s-cluster01에서 k8s-cluster02으로 전환하여 확인해 보자.
++ **k8s-cluster01에서 k8s-cluster02으로 전환하여 확인해 보자.**
 
 ```bash
 root@k8s-master:~# kubectl config get-contexts
@@ -206,3 +205,56 @@ deployment.apps/webserver   1/1     1            1           3m59s
 NAME                                   DESIRED   CURRENT   READY   AGE
 replicaset.apps/webserver-7c4f9bf7bf   1         1         1       3m59s
 ```
+
+<br>
+
+----
+
+> # 3. 컨텍스트 추가와 기본 네임스페이스 변경
+
+```bash
+## 컨텍스트 추가, prod 라는 이름의 컨텍스트를 만들고 싶을 때
+root@k8s-master:~# kubectl config set-context prod --cluster=k8s-cluster01 --user=k8s-cluster01-admin --namespace=prod
+Context "prod" created.
+
+
+## 컨텍스트 목록, CURRENT 열에 * 표시된 컨텐스트가 현재 사용 중인 컨텍스트
+root@k8s-master:~# kubectl config get-contexts
+CURRENT   NAME                                CLUSTER         AUTHINFO              NAMESPACE
+          k8s-cluster01-admin@k8s-cluster01   k8s-cluster01   k8s-cluster01-admin
+*         k8s-cluster02-admin@k8s-cluster02   k8s-cluster02   k8s-cluster02-admin
+          prod                                k8s-cluster01   k8s-cluster01-admin   prod
+
+
+## prod 컨텍스트 사용
+root@k8s-master:~# kubectl config use-context prod
+Switched to context "prod".
+
+
+root@k8s-master:~# kubectl config get-contexts
+CURRENT   NAME                                CLUSTER         AUTHINFO              NAMESPACE
+          k8s-cluster01-admin@k8s-cluster01   k8s-cluster01   k8s-cluster01-admin
+          k8s-cluster02-admin@k8s-cluster02   k8s-cluster02   k8s-cluster02-admin
+*         prod                                k8s-cluster01   k8s-cluster01-admin   prod
+
+
+root@k8s-master:~# kubectl get all
+No resources found in prod namespace.
+
+
+root@k8s-master:~# kubectl get all -n default
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   44d
+
+
+root@k8s-master:~# kubectl get all -n prod
+No resources found in prod namespace.
+```
+
+<br>
+
+----
+
+> # 4. 참고
+
++ https://bryan.wiki/292
