@@ -41,4 +41,36 @@
 
 ## (2) k8s 클러스터 컨텍스트 변경과 kubectl을 통한 multi-cluster 접속
 
++ 첫 번째 클러스터 .kube/config 파일 변경
 
+```
+$ kubectl config get-contexts
+CURRENT   NAME                          CLUSTER      AUTHINFO        NAMESPACE
+*         kubernetes-admin@kubernetes   kubernetes   kubernetes-admin
+
+$ vim .kube/config
+```
+```yaml
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: REDACTED
+    server: https://192.168.219.10:6443
+  name: k8s-cluster01                                 ## 변경 (1)
+contexts:
+- context:
+    cluster: k8s-cluster01                            ## 변경 (2)
+    user: k8s-cluster01-admin                         ## 변경 (3)
+  name: kk8s-cluster01-admin@k8s-cluster01            ## 변경 (3)
+current-context: k8s-cluster01-admin@k8s-cluster01    ## 변경 (4)
+kind: Config
+preferences: {}
+users:
+- name: help
+  user:
+    as-user-extra: {}
+- name: k8s-cluster01-admin                           ## 변경 (5)
+  user:
+    client-certificate-data: REDACTED 
+    client-key-data: REDACTED
+```
