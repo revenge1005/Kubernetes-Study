@@ -11,6 +11,14 @@
 
 + (GlusterFS와 Heketi 구성된 상태로 가정하고 진행한다)
 
++ https://naleejang.tistory.com/238?category=458005
+
++ https://wiki.myhypervisor.ca/books/linux/page/glusterfs-heketi-ubuntu-1804
+
++ https://www.youtube.com/watch?v=9i6EDR5GYw0&t=141s
+
++ https://www.youtube.com/watch?v=65XOlaERvjw
+
 ----
 
 # 2. 결과 확인 - GlusterFS 스토리지 시스템 마운트 확인
